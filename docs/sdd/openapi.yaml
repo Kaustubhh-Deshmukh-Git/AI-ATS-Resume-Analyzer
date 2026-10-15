@@ -1,0 +1,73 @@
+openapi: 3.0.3
+info: { title: ResumeIQ API, version: 1.0.0 }
+servers: [{ url: http://localhost:5000/api/v1 }]
+components:
+  securitySchemes:
+    cookieAuth: { type: apiKey, in: cookie, name: token }
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }
+            details: { type: array, items: { type: object } }
+            requestId: { type: string }
+    User:
+      type: object
+      properties: { id: { type: string }, name: { type: string }, email: { type: string } }
+    Analysis:
+      type: object
+      properties:
+        id: { type: string }
+        title: { type: string }
+        score: { type: integer, minimum: 0, maximum: 100 }
+        breakdown: { type: object, properties: { keyword: {type: number}, sections: {type: number}, readability: {type: number}, impact: {type: number} } }
+        matched: { type: array, items: { type: string } }
+        missing: { type: array, items: { type: string } }
+        aiStatus: { type: string, enum: [ok, unavailable] }
+        ai:
+          nullable: true
+          type: object
+          properties:
+            summary: { type: string }
+            missingSkills: { type: array, items: { type: string } }
+            optimizationTips: { type: array, items: { type: string } }
+            bulletImprovements:
+              type: array
+              items: { type: object, properties: { original: {type: string}, improved: {type: string}, reason: {type: string} } }
+        createdAt: { type: string, format: date-time }
+paths:
+  /health: { get: { responses: { '200': { description: ok } } } }
+  /auth/register:
+    post:
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [name,email,password], properties: { name: {type: string, minLength: 2, maxLength: 60}, email: {type: string, format: email}, password: {type: string, minLength: 8} } } } } }
+      responses: { '201': { description: created }, '400': { description: validation }, '409': { description: email exists } }
+  /auth/login:
+    post:
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [email,password], properties: { email: {type: string}, password: {type: string} } } } } }
+      responses: { '200': { description: ok, headers: { Set-Cookie: { schema: { type: string } } } }, '401': { description: invalid credentials }, '429': { description: rate limited } }
+  /auth/logout: { post: { security: [{ cookieAuth: [] }], responses: { '204': { description: ok } } } }
+  /auth/me: { get: { security: [{ cookieAuth: [] }], responses: { '200': { description: ok }, '401': { description: unauthorized } } } }
+  /resumes/parse:
+    post:
+      security: [{ cookieAuth: [] }]
+      requestBody: { required: true, content: { multipart/form-data: { schema: { type: object, properties: { resume: { type: string, format: binary } } } } } }
+      responses: { '200': { description: parsed }, '400': { description: not a pdf }, '413': { description: too large }, '422': { description: unreadable or too long } }
+  /analyses:
+    post:
+      security: [{ cookieAuth: [] }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [resumeText, jobDescription], properties: { resumeText: {type: string, minLength: 200, maxLength: 50000}, jobDescription: {type: string, minLength: 50, maxLength: 10000}, title: {type: string} } } } } }
+      responses: { '201': { description: created }, '400': { description: validation }, '429': { description: rate limited } }
+    get:
+      security: [{ cookieAuth: [] }]
+      parameters:
+        - { name: page, in: query, schema: { type: integer, default: 1 } }
+        - { name: limit, in: query, schema: { type: integer, default: 10, maximum: 50 } }
+      responses: { '200': { description: ok } }
+  /analyses/{id}:
+    parameters: [{ name: id, in: path, required: true, schema: { type: string } }]
+    get: { security: [{ cookieAuth: [] }], responses: { '200': { description: ok }, '404': { description: not found } } }
+    delete: { security: [{ cookieAuth: [] }], responses: { '204': { description: deleted }, '404': { description: not found } } }
