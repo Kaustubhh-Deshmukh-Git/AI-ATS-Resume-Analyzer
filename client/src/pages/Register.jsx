@@ -1,6 +1,109 @@
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx';
 
 export default function Register() {
+  const navigate = useNavigate();
+  const { user, register } = useAuth();
+
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [generalError, setGeneralError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  // If already logged in, redirect to dashboard
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [user, navigate]);
+
+  // Real-time password strength checks
+  const passwordCriteria = {
+    hasMinLength: formData.password.length >= 8,
+    hasLetter: /[a-zA-Z]/.test(formData.password),
+    hasNumber: /[0-9]/.test(formData.password),
+  };
+
+  const validate = () => {
+    const errors = {};
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+
+    if (!name) {
+      errors.name = 'Full name is required';
+    } else if (name.length < 2 || name.length > 60) {
+      errors.name = 'Name must be between 2 and 60 characters';
+    }
+
+    if (!email) {
+      errors.email = 'Email address is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+
+    if (!formData.password) {
+      errors.password = 'Password is required';
+    } else if (
+      !passwordCriteria.hasMinLength ||
+      !passwordCriteria.hasLetter ||
+      !passwordCriteria.hasNumber
+    ) {
+      errors.password = 'Password does not meet all criteria';
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (fieldErrors[name]) {
+      setFieldErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+    if (generalError) {
+      setGeneralError('');
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (submitting) return; // Prevent double submit
+
+    if (!validate()) return;
+
+    setSubmitting(true);
+    setGeneralError('');
+
+    try {
+      await register({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        password: formData.password,
+      });
+
+      navigate('/dashboard', { replace: true });
+    } catch (err) {
+      // Capture detailed conflict or validation messages
+      if (err.status === 409) {
+        setFieldErrors((prev) => ({
+          ...prev,
+          email: 'An account with this email already exists',
+        }));
+        setGeneralError('An account with this email already exists');
+      } else {
+        setGeneralError(err.message || 'Registration failed. Please check your details.');
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div style={{ maxWidth: '420px', margin: '3rem auto' }}>
       <div className="glass-card">
@@ -10,81 +113,105 @@ export default function Register() {
             color: 'var(--text-secondary)',
             fontSize: '0.95rem',
             textAlign: 'center',
-            marginBottom: '2rem',
+            marginBottom: '1.75rem',
           }}
         >
           Start scanning and optimizing your resumes today
         </p>
 
-        <form onSubmit={(e) => e.preventDefault()} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          <div>
-            <label
-              htmlFor="name"
-              style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.5rem' }}
-            >
+        {generalError && (
+          <div className="alert-error" role="alert" id="register-error-alert">
+            <span>⚠️</span>
+            <span>{generalError}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          <div className="form-group">
+            <label htmlFor="name" className="form-label">
               Full Name
             </label>
             <input
               id="name"
+              name="name"
               type="text"
+              autoComplete="name"
               placeholder="Alex Johnson"
-              style={{
-                width: '100%',
-                padding: '0.75rem 1rem',
-                borderRadius: 'var(--radius-sm)',
-                background: 'var(--bg-secondary)',
-                border: '1px solid var(--border-subtle)',
-                color: 'var(--text-primary)',
-              }}
+              value={formData.name}
+              onChange={handleChange}
+              disabled={submitting}
+              className={`form-input ${fieldErrors.name ? 'is-invalid' : ''}`}
             />
+            {fieldErrors.name && <span className="field-error">{fieldErrors.name}</span>}
           </div>
 
-          <div>
-            <label
-              htmlFor="email"
-              style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.5rem' }}
-            >
+          <div className="form-group">
+            <label htmlFor="email" className="form-label">
               Email Address
             </label>
             <input
               id="email"
+              name="email"
               type="email"
+              autoComplete="email"
               placeholder="you@example.com"
-              style={{
-                width: '100%',
-                padding: '0.75rem 1rem',
-                borderRadius: 'var(--radius-sm)',
-                background: 'var(--bg-secondary)',
-                border: '1px solid var(--border-subtle)',
-                color: 'var(--text-primary)',
-              }}
+              value={formData.email}
+              onChange={handleChange}
+              disabled={submitting}
+              className={`form-input ${fieldErrors.email ? 'is-invalid' : ''}`}
             />
+            {fieldErrors.email && <span className="field-error">{fieldErrors.email}</span>}
           </div>
 
-          <div>
-            <label
-              htmlFor="password"
-              style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.5rem' }}
-            >
+          <div className="form-group">
+            <label htmlFor="password" className="form-label">
               Password
             </label>
             <input
               id="password"
+              name="password"
               type="password"
+              autoComplete="new-password"
               placeholder="At least 8 characters"
-              style={{
-                width: '100%',
-                padding: '0.75rem 1rem',
-                borderRadius: 'var(--radius-sm)',
-                background: 'var(--bg-secondary)',
-                border: '1px solid var(--border-subtle)',
-                color: 'var(--text-primary)',
-              }}
+              value={formData.password}
+              onChange={handleChange}
+              disabled={submitting}
+              className={`form-input ${fieldErrors.password ? 'is-invalid' : ''}`}
             />
+            {fieldErrors.password && <span className="field-error">{fieldErrors.password}</span>}
+
+            {/* Real-time criteria checklist */}
+            <div className="password-criteria" style={{ marginTop: '0.25rem' }}>
+              <div className={`criteria-item ${passwordCriteria.hasMinLength ? 'met' : ''}`}>
+                <span>{passwordCriteria.hasMinLength ? '✓' : '○'}</span>
+                <span>At least 8 characters long</span>
+              </div>
+              <div className={`criteria-item ${passwordCriteria.hasLetter ? 'met' : ''}`}>
+                <span>{passwordCriteria.hasLetter ? '✓' : '○'}</span>
+                <span>Contains at least one letter</span>
+              </div>
+              <div className={`criteria-item ${passwordCriteria.hasNumber ? 'met' : ''}`}>
+                <span>{passwordCriteria.hasNumber ? '✓' : '○'}</span>
+                <span>Contains at least one number</span>
+              </div>
+            </div>
           </div>
 
-          <button type="submit" className="btn btn-primary" id="register-submit-btn" style={{ marginTop: '0.5rem' }}>
-            Create Account
+          <button
+            type="submit"
+            className="btn btn-primary"
+            id="register-submit-btn"
+            disabled={submitting}
+            style={{ marginTop: '0.5rem' }}
+          >
+            {submitting ? (
+              <>
+                <span className="spinner" />
+                <span>Creating Account...</span>
+              </>
+            ) : (
+              'Create Account'
+            )}
           </button>
         </form>
 

@@ -26,6 +26,12 @@ export const errorHandler = (err, req, res, _next) => {
     code = 'VALIDATION_ERROR';
     message = 'Invalid JSON in request body';
     details = [{ message: err.message }];
+  } else if (err.code === 11000) {
+    statusCode = 409;
+    code = 'CONFLICT';
+    message = 'Resource already exists';
+    const field = Object.keys(err.keyPattern || {})[0] || 'field';
+    details = [{ path: field, message: `An account with this ${field} already exists` }];
   }
 
   if (statusCode >= 500) {
