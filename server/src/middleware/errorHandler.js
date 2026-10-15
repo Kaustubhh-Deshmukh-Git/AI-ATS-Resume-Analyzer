@@ -6,6 +6,10 @@ import { env } from '../config/env.js';
  * Formats errors according to the SDD 04 standard error shape.
  */
 export const errorHandler = (err, req, res, _next) => {
+  if (req && !req.complete && req.readable) {
+    req.resume();
+  }
+
   const requestId = req.id || req.headers['x-request-id'] || 'unknown';
 
   let statusCode = err.statusCode || 500;
@@ -32,6 +36,17 @@ export const errorHandler = (err, req, res, _next) => {
     message = 'Resource already exists';
     const field = Object.keys(err.keyPattern || {})[0] || 'field';
     details = [{ path: field, message: `An account with this ${field} already exists` }];
+  } else if (err.name === 'MulterError') {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      statusCode = 413;
+      code = 'PAYLOAD_TOO_LARGE';
+      message = 'File size exceeds the 5MB limit';
+    } else {
+      statusCode = 400;
+      code = 'VALIDATION_ERROR';
+      message = err.message || 'File upload error';
+    }
+    details = [{ path: 'resume', message }];
   }
 
   if (statusCode >= 500) {

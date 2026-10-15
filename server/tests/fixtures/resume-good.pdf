@@ -1,0 +1,28 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> >> >> >>
+endobj
+4 0 obj
+<< /Length 1297 >>
+stream
+BT /F1 12 Tf 50 750 Td 14 TL (Alex Morgan - Senior Full Stack Software Engineer) ' (Email: alex.morgan@example.com | Phone: 555-123-4567 | San Francisco, CA | LinkedIn: linkedin.com/in/alexmorgan) ' (Professional Summary:) ' (Results-driven Software Engineer with over 6 years of experience architecting high-performance web applications, distributed microservices, and modern user interfaces. Proven track record in TypeScript, Node.js, React, Express, and PostgreSQL, reducing latency by 45% and optimizing database queries.) ' (Technical Skills:) ' (Languages: JavaScript ES6+, TypeScript, Python, SQL, HTML5, CSS3) ' (Frameworks & Libraries: React, Node.js, Express, Next.js, Redux, Vitest, Jest) ' (Databases & Tools: MongoDB, PostgreSQL, Redis, Docker, Git, AWS, CI/CD pipelines) ' (Work Experience:) ' (Senior Software Engineer | TechCorp Inc. | 2021 - Present) ' (- Architected scalable RESTful APIs serving 2M+ active daily requests with 99.99% uptime.) ' (- Led migration of legacy monolith to microservices using Node.js and Docker, reducing build time by 60%.) ' (- Mentored junior engineers and conducted comprehensive code reviews adhering to industry best practices.) ' (Education:) ' (Bachelor of Science in Computer Science | University of California, Berkeley | 2015 - 2019) ' ET
+endstream
+endobj
+xref
+0 5
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000290 00000 n 
+trailer
+<< /Size 5 /Root 1 0 R >>
+startxref
+1639
+%%EOF

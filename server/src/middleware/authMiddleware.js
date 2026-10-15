@@ -16,6 +16,14 @@ export const requireAuth = async (req, _res, next) => {
     }
 
     if (!token) {
+      if (!req.complete && req.readable) {
+        req.on('data', () => {});
+        await new Promise((resolve) => {
+          req.on('end', resolve);
+          req.on('error', resolve);
+          setTimeout(resolve, 300);
+        });
+      }
       throw new AppError('Authentication required', 401, 'UNAUTHORIZED');
     }
 

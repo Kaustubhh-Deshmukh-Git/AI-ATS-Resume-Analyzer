@@ -9,6 +9,7 @@ import { logger } from './utils/logger.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { AppError } from './utils/AppError.js';
 import authRoutes from './routes/authRoutes.js';
+import resumeRoutes from './routes/resumeRoutes.js';
 
 const app = express();
 
@@ -57,6 +58,10 @@ app.get('/api/v1/health', healthCheck);
 // Authentication routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/auth', authRoutes);
+
+// Resume upload & parsing routes
+app.use('/api/v1/resumes', resumeRoutes);
+app.use('/resumes', resumeRoutes);
 
 // Catch-all route handler for unknown endpoints
 app.use((_req, _res, next) => {

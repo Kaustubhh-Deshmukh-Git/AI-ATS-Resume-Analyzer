@@ -27,3 +27,16 @@
 - Navigation header with dynamic user avatar badge and sign out action
 - Vitest integration tests covering duplicate emails, weak passwords, cookie sessions, generic 401s, token expiry, and rate limiting
 
+## [0.3.0] - 2026-10-15
+### Added
+- Milestone 2: Upload & Parse (UPL-1..UPL-6)
+- Multer memory storage upload middleware with 5MB limit, single field `resume`, and PDF MIME/extension validation
+- `pdfService` with `%PDF-` magic bytes verification, `pdfjs-dist` legacy text extraction, 10-page cap, whitespace normalization, and scanned/image-only PDF detection (<200 chars)
+- `POST /api/v1/resumes/parse` endpoint returning `{ text, pages, charCount }`
+- Defensive socket stream draining in auth and error middleware to prevent premature TCP connection resets on rejected uploads
+- Reusable `FileDropzone` component featuring drag-and-drop, client-side size/type checks, parsing progress indicator, and error banners
+- Dashboard integration displaying parsed resume summary and collapsible text preview
+- Programmatic PDF test fixture generator creating good, scanned, 11-page, and non-PDF fixtures
+- Vitest integration test suites in server and client covering all upload criteria UPL-1..UPL-6
+
+
