@@ -1,7 +1,7 @@
 # SDD 10 — Milestones (start 2026-10-15)
 | # | Milestone | Deadline | Exit criteria | Done |
 |---|---|---|---|---|
-| M0 | Scaffold + CI green | Oct 16 | `/health` 200, CI passing | ☐ |
+| M0 | Scaffold + CI green | Oct 16 | `/health` 200, CI passing | ☑ |
 | M1 | Auth (server + client) | Oct 19 | AUTH-1..6 | ☐ |
 | M2 | Upload & parse | Oct 22 | UPL-1..6 | ☐ |
 | M3 | Deterministic ATS engine | Oct 26 | ENG-1..6, ≥90% cov | ☐ |
