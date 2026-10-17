@@ -1,0 +1,1922 @@
+[
+  {
+    "name": "javascript",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "typescript",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "python",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "java",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "c++",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "c#",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "c",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "go",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "rust",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "ruby",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "php",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "swift",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "kotlin",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "sql",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "html",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "css",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "r",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "scala",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "dart",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "shell",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "bash",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "powershell",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "perl",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "haskell",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "elixir",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "clojure",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "lua",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "solidity",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "assembly",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "objective-c",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "matlab",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "groovy",
+    "category": "languages",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "react",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "react native",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "vue",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "angular",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "next.js",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "nuxt.js",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "svelte",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "sveltekit",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "redux",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "mobx",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "zustand",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "tailwind",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "tailwind css",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "bootstrap",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "sass",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "less",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "webpack",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "vite",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "rollup",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "parcel",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "babel",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "jquery",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "three.js",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "d3.js",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "rxjs",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "chakra ui",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "material ui",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "shadcn",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "styled-components",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "html5",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "css3",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "pwa",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "webgl",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "webassembly",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "responsive design",
+    "category": "frontend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "node.js",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "express",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "nestjs",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "fastify",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "koa",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "deno",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "bun",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "django",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "flask",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "fastapi",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "tornado",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "spring",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "spring boot",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "hibernate",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": ".net",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": ".net core",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "asp.net",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "ruby on rails",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "laravel",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "symfony",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "gin",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "echo",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "actix",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "axum",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "rocket",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "grpc",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "graphql",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "apollo",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "rest api",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "microservices",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "serverless",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "websockets",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "socket.io",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "mongodb",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "postgresql",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "mysql",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "redis",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "sqlite",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "mariadb",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "oracle",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "sql server",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "cassandra",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "dynamodb",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "couchdb",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "neo4j",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "elasticsearch",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "opensearch",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "solr",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "firebase",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "firestore",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "supabase",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "snowflake",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "bigquery",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "redshift",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "clickhouse",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "memcached",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "prisma",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "typeorm",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "mongoose",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "drizzle",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "sqlalchemy",
+    "category": "databases",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "aws",
+    "category": "cloud",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "azure",
+    "category": "cloud",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "gcp",
+    "category": "cloud",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "docker",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "kubernetes",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "helm",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "terraform",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "ansible",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "pulumi",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "puppet",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "chef",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "jenkins",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "gitlab ci",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "github actions",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "circleci",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "travis ci",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "argocd",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "ci/cd",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "linux",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "unix",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "ubuntu",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "debian",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "centos",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "redhat",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "nginx",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "apache",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "caddy",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "traefik",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "cloudflare",
+    "category": "cloud",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "lambda",
+    "category": "cloud",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "s3",
+    "category": "cloud",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "ec2",
+    "category": "cloud",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "ecs",
+    "category": "cloud",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "eks",
+    "category": "cloud",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "gke",
+    "category": "cloud",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "aks",
+    "category": "cloud",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "cloudformation",
+    "category": "cloud",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "prometheus",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "grafana",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "datadog",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "new relic",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "splunk",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "sentry",
+    "category": "devops",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "kafka",
+    "category": "data",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "rabbitmq",
+    "category": "data",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "activemq",
+    "category": "data",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "sqs",
+    "category": "cloud",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "sns",
+    "category": "cloud",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "eventbridge",
+    "category": "cloud",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "celery",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "bullmq",
+    "category": "backend",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "machine learning",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "deep learning",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "artificial intelligence",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "natural language processing",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "nlp",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "computer vision",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "large language models",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "llm",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "generative ai",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "genai",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "rag",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "langchain",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "llamaindex",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "tensorflow",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "pytorch",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "keras",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "scikit-learn",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "pandas",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "numpy",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "scipy",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "hugging face",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "transformers",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "opencv",
+    "category": "ai_ml",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "spark",
+    "category": "data",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "pyspark",
+    "category": "data",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "hadoop",
+    "category": "data",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "airflow",
+    "category": "data",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "dbt",
+    "category": "data",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "kafka streams",
+    "category": "data",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "tableau",
+    "category": "data",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "power bi",
+    "category": "data",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "data engineering",
+    "category": "data",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "data pipelines",
+    "category": "data",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "etl",
+    "category": "data",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "data modeling",
+    "category": "data",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "data warehousing",
+    "category": "data",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "unit testing",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "integration testing",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "end-to-end testing",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "e2e testing",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "automated testing",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "tdd",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "bdd",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "jest",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "vitest",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "cypress",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "playwright",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "selenium",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "mocha",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "chai",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "pytest",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "junit",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "postman",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "supertest",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "k6",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "jmeter",
+    "category": "testing",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "cybersecurity",
+    "category": "security",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "owasp",
+    "category": "security",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "penetration testing",
+    "category": "security",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "vulnerability assessment",
+    "category": "security",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "oauth",
+    "category": "security",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "oauth2",
+    "category": "security",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "jwt",
+    "category": "security",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "saml",
+    "category": "security",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "iam",
+    "category": "security",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "ssl",
+    "category": "security",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "tls",
+    "category": "security",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "encryption",
+    "category": "security",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "cryptography",
+    "category": "security",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "zero trust",
+    "category": "security",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "soc2",
+    "category": "security",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "gdpr",
+    "category": "security",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "system design",
+    "category": "architecture",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "distributed systems",
+    "category": "architecture",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "clean architecture",
+    "category": "architecture",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "domain-driven design",
+    "category": "architecture",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "ddd",
+    "category": "architecture",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "event-driven architecture",
+    "category": "architecture",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "oop",
+    "category": "architecture",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "functional programming",
+    "category": "architecture",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "design patterns",
+    "category": "architecture",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "solid principles",
+    "category": "architecture",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "code review",
+    "category": "practices",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "git",
+    "category": "tools",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "github",
+    "category": "tools",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "gitlab",
+    "category": "tools",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "bitbucket",
+    "category": "tools",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "jira",
+    "category": "tools",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "confluence",
+    "category": "tools",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "agile",
+    "category": "methodologies",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "scrum",
+    "category": "methodologies",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "kanban",
+    "category": "methodologies",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "lean",
+    "category": "methodologies",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "android",
+    "category": "mobile",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "ios",
+    "category": "mobile",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "flutter",
+    "category": "mobile",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "xamarin",
+    "category": "mobile",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "ionic",
+    "category": "mobile",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "cordova",
+    "category": "mobile",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "electron",
+    "category": "desktop",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "tauri",
+    "category": "desktop",
+    "type": "hard",
+    "weight": 2
+  },
+  {
+    "name": "leadership",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "communication",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "problem solving",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "teamwork",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "collaboration",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "time management",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "adaptability",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "critical thinking",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "mentoring",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "project management",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "conflict resolution",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "public speaking",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "presentation skills",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "stakeholder management",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "decision making",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "active listening",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "emotional intelligence",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "negotiation",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "analytical thinking",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "cross-functional collaboration",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "attention to detail",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "self-motivation",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "strategic planning",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "creative thinking",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "organization",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "accountability",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "customer focus",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "empathy",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "curiosity",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "work ethic",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "coaching",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "prioritization",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "resourcefulness",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "continuous learning",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "growth mindset",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "interpersonal skills",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "ownership",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "initiative",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "resilience",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  },
+  {
+    "name": "flexibility",
+    "category": "soft_skills",
+    "type": "soft",
+    "weight": 1
+  }
+]
