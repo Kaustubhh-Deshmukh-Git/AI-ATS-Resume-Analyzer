@@ -17,10 +17,18 @@ const app = express();
 // Security headers
 app.use(helmet());
 
-// CORS configuration (allowlist from CLIENT_ORIGIN with credentials)
+// CORS configuration (allowlist strictly from CLIENT_ORIGIN with credentials)
+const allowedOrigins = [env.CLIENT_ORIGIN];
+
 app.use(
   cors({
-    origin: env.CLIENT_ORIGIN,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, false);
+      }
+    },
     credentials: true,
   })
 );
