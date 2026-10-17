@@ -62,8 +62,25 @@
 - Strict raw resume text exclusion from the database and response payloads to safeguard candidate privacy
 - Analyses CRUD routes: `POST /api/v1/analyses`, `GET /api/v1/analyses` (paginated), `GET /api/v1/analyses/:id`, and `DELETE /api/v1/analyses/:id`
 - IDOR defenses returning 404 `NOT_FOUND` on non-owner access or deletion attempts
-- Rate limiter restricting `POST /analyses` to 10 requests per hour per authenticated user returning 429 `RATE_LIMITED`
 - Vitest unit and integration test suites covering AI-1..AI-6 and API-1..API-8
+
+## [0.6.0] - 2026-10-17
+### Added
+- Milestone 5: Frontend Product (UI-1..UI-8)
+- `JdTextarea` component with accessible character count (50–10,000 chars), live boundary guidance, and input validation (UI-1)
+- Interactive analysis submission with loading state, button disabling, and accessible loading spinner (UI-2)
+- Centralized error banner presentation for upload, API, and validation errors (UI-3)
+- `ScoreGauge` SVG circular score meter with animated stroke, color-coded tiers (Strong, Moderate, Needs Optimization), and accessible `role="meter"` semantics (UI-4)
+- `BreakdownBars` visualizer for Keyword Match (60%), Section Structure (20%), Readability (10%), and Impact (10%)
+- `KeywordChips` component with tabbed views for Matched (green) and Missing (amber/red) ATS taxonomy skills (UI-5)
+- `BulletCompare` component with clipboard copy functionality (`navigator.clipboard.writeText`), visual "Copied!" confirmation, and screen reader live notification (UI-6)
+- `AiSuggestions` section presenting AI-identified missing skills, tactical recommendations, and bullet point rewrites
+- `DegradedAiBanner` informing candidates that deterministic scoring is fully intact when AI services are unavailable
+- `History` view (`/history`) with paginated analysis cards, score badges, job description snippets, and delete action
+- Accessible `ConfirmModal` dialog with focus trapping, Escape key dismiss, and focus restoration for report deletion (UI-7)
+- Comprehensive keyboard accessibility, visible `:focus-visible` rings, ARIA labels, and responsive layout for screens down to 360px (UI-8)
+- Modular `ErrorBoundary` catching and isolating runtime rendering crashes with graceful reload/retry actions
+- Vitest and React Testing Library test suites in client covering UI-1 through UI-8 (29 tests passing)
 
 
 
