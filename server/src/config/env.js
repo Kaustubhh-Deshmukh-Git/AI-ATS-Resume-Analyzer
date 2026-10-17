@@ -22,7 +22,7 @@ const envSchema = z.object({
   GEMINI_API_KEY: z
     .string()
     .default(process.env.NODE_ENV === 'test' ? 'test_gemini_api_key' : ''),
-  GEMINI_MODEL: z.string().default('gemini-2.5-flash'),
+  GEMINI_MODEL: z.string().default('gemini-3.8-flash'),
   CLIENT_ORIGIN: z.string().default('http://localhost:5173'),
 });
 
