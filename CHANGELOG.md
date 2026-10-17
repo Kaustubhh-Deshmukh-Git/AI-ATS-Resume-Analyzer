@@ -92,7 +92,19 @@
 - Enhanced graceful shutdown with connection draining and 10-second unref force exit timeout on `SIGTERM` / `SIGINT`
 - Autocannon load testing benchmark (`server/tests/load/loadTest.js`): 50 RPS for 30s with mocked Gemini, achieving p95 latency of 33ms (< 300ms threshold) and 100% 2xx responses (1,500/1,500 requests)
 - Zero high or critical vulnerabilities verified across root, `server/`, and `client/` packages (`npm audit`)
-- Server test coverage raised to 90.92% line coverage (90.39% statements, 94.04% functions), well exceeding the ≥80% requirement
+## [0.8.0] - 2026-10-17
+### Added
+- Milestone 7: Production Deployment, Ops & Release Workflow (DEP-1..DEP-5)
+- Multi-stage non-root `server/Dockerfile` using `node:20-alpine`, `USER node`, and built-in Docker `HEALTHCHECK` (DEP-1)
+- Multi-stage `client/Dockerfile` with Nginx Alpine static serving, gzip compression, and SPA routing fallback (`client/nginx.conf`)
+- `docker-compose.yml` for local container orchestration across Express server, React client, and MongoDB 7.0
+- `render.yaml` Blueprint configuration for automated Render deployment with environment synchronization and health check path
+- `client/vercel.json` and root `vercel.json` with SPA rewrites, clean URLs, and strict HTTP security headers
+- Comprehensive production deployment documentation and environment checklist in `docs/sdd/09-deployment.md` (DEP-2)
+- Automated deployment acceptance smoke test (`scripts/smoke-test.js`) verifying DEP-1 through DEP-5 (DEP-3, DEP-4, DEP-5)
+- Documented 1-click rollback procedures for Vercel and Render deployments (DEP-5)
+- Automated version release helper (`scripts/release.js`) and updated `/release` workflow in `.agent/workflows/release.md`
+- Completely revised `README.md` with badges, live demo URLs, Mermaid system architecture diagram, environment variables reference, and API specifications
 
 
 
