@@ -39,4 +39,16 @@
 - Programmatic PDF test fixture generator creating good, scanned, 11-page, and non-PDF fixtures
 - Vitest integration test suites in server and client covering all upload criteria UPL-1..UPL-6
 
+## [0.4.0] - 2026-10-17
+### Added
+- Milestone 3: Deterministic ATS Engine (ENG-1..ENG-6)
+- Pure normalization utility `normalize.js` with alias dictionary, technical token preservation (C++, C#, .NET, Node.js, CI/CD), and n-gram extraction (1–3)
+- Curated `stopwords.js` Set for O(1) stopword filtering while safeguarding technical identifiers
+- Curated `skills.json` taxonomy featuring 320 skills across languages, frontend, backend, databases, cloud/devops, data/AI, testing, architecture, and soft skills with weighted scoring
+- `keywordService.js` pure module extracting taxonomy skills, calculating weighted keyword matches, and raising 400 VALIDATION_ERROR on empty JD keywords
+- `scoreService.js` implementing the deterministic weighted scoring formula: `0.60 * keywordMatch + 0.20 * sections + 0.10 * readability + 0.10 * impact`
+- 3 Golden file resume/JD test pairs calibrating expected scores and keywords
+- Full unit test suites covering ENG-1 (determinism), ENG-2 (alias normalization), ENG-3 (stopword filtering), ENG-4 (empty JD rejection), ENG-5 (0–100 score bounds), and ENG-6 (breakdown sum equality)
+
+
 
