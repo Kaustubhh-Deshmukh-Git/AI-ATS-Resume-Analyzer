@@ -1,6 +1,81 @@
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx';
 
 export default function Login() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, login } = useAuth();
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [generalError, setGeneralError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  // If already authenticated, redirect to destination or dashboard
+  useEffect(() => {
+    if (user) {
+      const destination = location.state?.from?.pathname || '/dashboard';
+      navigate(destination, { replace: true });
+    }
+  }, [user, navigate, location]);
+
+  const validate = () => {
+    const errors = {};
+    const email = formData.email.trim();
+
+    if (!email) {
+      errors.email = 'Email address is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+
+    if (!formData.password) {
+      errors.password = 'Password is required';
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (fieldErrors[name]) {
+      setFieldErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+    if (generalError) {
+      setGeneralError('');
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (submitting) return; // Prevent double submit
+
+    if (!validate()) return;
+
+    setSubmitting(true);
+    setGeneralError('');
+
+    try {
+      await login({
+        email: formData.email.trim(),
+        password: formData.password,
+      });
+
+      const destination = location.state?.from?.pathname || '/dashboard';
+      navigate(destination, { replace: true });
+    } catch (err) {
+      setGeneralError(err.message || 'Invalid email or password');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div style={{ maxWidth: '420px', margin: '3rem auto' }}>
       <div className="glass-card">
@@ -10,59 +85,71 @@ export default function Login() {
             color: 'var(--text-secondary)',
             fontSize: '0.95rem',
             textAlign: 'center',
-            marginBottom: '2rem',
+            marginBottom: '1.75rem',
           }}
         >
           Sign in to access your saved resume analyses
         </p>
 
-        <form onSubmit={(e) => e.preventDefault()} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          <div>
-            <label
-              htmlFor="email"
-              style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.5rem' }}
-            >
+        {generalError && (
+          <div className="alert-error" role="alert" id="login-error-alert">
+            <span>⚠️</span>
+            <span>{generalError}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          <div className="form-group">
+            <label htmlFor="email" className="form-label">
               Email Address
             </label>
             <input
               id="email"
+              name="email"
               type="email"
+              autoComplete="email"
               placeholder="you@example.com"
-              style={{
-                width: '100%',
-                padding: '0.75rem 1rem',
-                borderRadius: 'var(--radius-sm)',
-                background: 'var(--bg-secondary)',
-                border: '1px solid var(--border-subtle)',
-                color: 'var(--text-primary)',
-              }}
+              value={formData.email}
+              onChange={handleChange}
+              disabled={submitting}
+              className={`form-input ${fieldErrors.email ? 'is-invalid' : ''}`}
             />
+            {fieldErrors.email && <span className="field-error">{fieldErrors.email}</span>}
           </div>
 
-          <div>
-            <label
-              htmlFor="password"
-              style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.5rem' }}
-            >
+          <div className="form-group">
+            <label htmlFor="password" className="form-label">
               Password
             </label>
             <input
               id="password"
+              name="password"
               type="password"
+              autoComplete="current-password"
               placeholder="••••••••"
-              style={{
-                width: '100%',
-                padding: '0.75rem 1rem',
-                borderRadius: 'var(--radius-sm)',
-                background: 'var(--bg-secondary)',
-                border: '1px solid var(--border-subtle)',
-                color: 'var(--text-primary)',
-              }}
+              value={formData.password}
+              onChange={handleChange}
+              disabled={submitting}
+              className={`form-input ${fieldErrors.password ? 'is-invalid' : ''}`}
             />
+            {fieldErrors.password && <span className="field-error">{fieldErrors.password}</span>}
           </div>
 
-          <button type="submit" className="btn btn-primary" id="login-submit-btn" style={{ marginTop: '0.5rem' }}>
-            Sign In
+          <button
+            type="submit"
+            className="btn btn-primary"
+            id="login-submit-btn"
+            disabled={submitting}
+            style={{ marginTop: '0.5rem' }}
+          >
+            {submitting ? (
+              <>
+                <span className="spinner" />
+                <span>Signing In...</span>
+              </>
+            ) : (
+              'Sign In'
+            )}
           </button>
         </form>
 

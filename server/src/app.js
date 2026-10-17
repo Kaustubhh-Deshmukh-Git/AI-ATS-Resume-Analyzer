@@ -8,6 +8,7 @@ import { env } from './config/env.js';
 import { logger } from './utils/logger.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { AppError } from './utils/AppError.js';
+import authRoutes from './routes/authRoutes.js';
 
 const app = express();
 
@@ -52,6 +53,10 @@ const healthCheck = (_req, res) => {
 
 app.get('/health', healthCheck);
 app.get('/api/v1/health', healthCheck);
+
+// Authentication routes
+app.use('/api/v1/auth', authRoutes);
+app.use('/auth', authRoutes);
 
 // Catch-all route handler for unknown endpoints
 app.use((_req, _res, next) => {
