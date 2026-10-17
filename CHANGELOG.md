@@ -82,5 +82,17 @@
 - Modular `ErrorBoundary` catching and isolating runtime rendering crashes with graceful reload/retry actions
 - Vitest and React Testing Library test suites in client covering UI-1 through UI-8 (29 tests passing)
 
+## [0.7.0] - 2026-10-17
+### Added
+- Milestone 6: Security Hardening, Audit & Performance Benchmarking (SEC-1..SEC-10)
+- Execution and validation of `/review-security` checklist with 100% PASS evidence across all 10 criteria
+- Comprehensive security test suite (`server/tests/security.test.js`) verifying Helmet headers, cookie flags, password redaction, request ID propagation, and 404 error consistency
+- Strict dynamic CORS allowlist enforcing `CLIENT_ORIGIN` with credentials and rejecting unauthorized origins (SEC-9)
+- MongoDB index initialization and verification for `User` (unique lowercase email) and `Analysis` (`{ userId: 1, createdAt: -1 }`) compound indexes
+- Enhanced graceful shutdown with connection draining and 10-second unref force exit timeout on `SIGTERM` / `SIGINT`
+- Autocannon load testing benchmark (`server/tests/load/loadTest.js`): 50 RPS for 30s with mocked Gemini, achieving p95 latency of 33ms (< 300ms threshold) and 100% 2xx responses (1,500/1,500 requests)
+- Zero high or critical vulnerabilities verified across root, `server/`, and `client/` packages (`npm audit`)
+- Server test coverage raised to 90.92% line coverage (90.39% statements, 94.04% functions), well exceeding the ≥80% requirement
+
 
 
