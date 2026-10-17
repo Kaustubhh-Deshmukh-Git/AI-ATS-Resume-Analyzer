@@ -50,5 +50,20 @@
 - 3 Golden file resume/JD test pairs calibrating expected scores and keywords
 - Full unit test suites covering ENG-1 (determinism), ENG-2 (alias normalization), ENG-3 (stopword filtering), ENG-4 (empty JD rejection), ENG-5 (0–100 score bounds), and ENG-6 (breakdown sum equality)
 
+## [0.5.0] - 2026-10-17
+### Added
+- Milestone 4: Gemini AI Integration & Persistence (AI-1..AI-6, API-1..API-8)
+- `geminiService.js` calling `gemini-2.5-flash:generateContent` using secure `x-goog-api-key` header (never exposed in query string or logs)
+- Structured JSON output enforcement via Gemini `responseMimeType: "application/json"` and strict `responseSchema`
+- Robust prompt injection defense wrapping resume and JD in `<RESUME_UNTRUSTED_CONTENT>` and `<JD_UNTRUSTED_CONTENT>` XML blocks
+- Resilient Gemini call handling with 20s `AbortController` timeout and exponential backoff retry mechanism on 429/5xx status codes
+- Graceful degradation returning `aiStatus: "unavailable"` and `ai: null` while preserving deterministic ATS score on AI API errors
+- `Analysis` Mongoose model storing privacy-preserving SHA-256 `resumeHash`, truncated `jdSnippet`, score, breakdown, matched/missing keywords, and optional AI suggestions
+- Strict raw resume text exclusion from the database and response payloads to safeguard candidate privacy
+- Analyses CRUD routes: `POST /api/v1/analyses`, `GET /api/v1/analyses` (paginated), `GET /api/v1/analyses/:id`, and `DELETE /api/v1/analyses/:id`
+- IDOR defenses returning 404 `NOT_FOUND` on non-owner access or deletion attempts
+- Rate limiter restricting `POST /analyses` to 10 requests per hour per authenticated user returning 429 `RATE_LIMITED`
+- Vitest unit and integration test suites covering AI-1..AI-6 and API-1..API-8
+
 
 

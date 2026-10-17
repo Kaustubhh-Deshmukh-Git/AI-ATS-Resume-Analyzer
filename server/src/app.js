@@ -10,6 +10,7 @@ import { errorHandler } from './middleware/errorHandler.js';
 import { AppError } from './utils/AppError.js';
 import authRoutes from './routes/authRoutes.js';
 import resumeRoutes from './routes/resumeRoutes.js';
+import analysisRoutes from './routes/analysisRoutes.js';
 
 const app = express();
 
@@ -62,6 +63,10 @@ app.use('/auth', authRoutes);
 // Resume upload & parsing routes
 app.use('/api/v1/resumes', resumeRoutes);
 app.use('/resumes', resumeRoutes);
+
+// ATS Analyses routes
+app.use('/api/v1/analyses', analysisRoutes);
+app.use('/analyses', analysisRoutes);
 
 // Catch-all route handler for unknown endpoints
 app.use((_req, _res, next) => {
