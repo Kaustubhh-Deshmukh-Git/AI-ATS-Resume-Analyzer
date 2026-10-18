@@ -1,7 +1,17 @@
+import dns from 'dns';
 import mongoose from 'mongoose';
 import app from './app.js';
 import { env } from './config/env.js';
 import { logger } from './utils/logger.js';
+
+// Optional DNS resolver override for restricted environments
+if (process.env.DNS_SERVERS) {
+  try {
+    dns.setServers(process.env.DNS_SERVERS.split(',').map((s) => s.trim()));
+  } catch (err) {
+    logger.warn({ err }, 'Failed to set custom DNS servers, retaining system default');
+  }
+}
 
 let server;
 
@@ -20,8 +30,16 @@ async function startServer() {
   }
 }
 
-const shutdown = async (signal) => {
+export const shutdown = async (signal) => {
   logger.info(`Received ${signal}. Shutting down gracefully...`);
+
+  // Force exit fallback if connections refuse to drain within 10 seconds
+  const forceTimer = setTimeout(() => {
+    logger.error('Graceful shutdown timed out, forcing exit.');
+    process.exit(1);
+  }, 10000);
+  forceTimer.unref();
+
   if (server) {
     server.close(async () => {
       logger.info('HTTP server closed');
@@ -41,4 +59,9 @@ const shutdown = async (signal) => {
 process.on('SIGINT', () => shutdown('SIGINT'));
 process.on('SIGTERM', () => shutdown('SIGTERM'));
 
-startServer();
+if (process.env.NODE_ENV !== 'test') {
+  startServer();
+}
+
+export { startServer };
+

@@ -1,4 +1,32 @@
 # Changelog
+
+## [Unreleased]
+### Fixed
+- **Security & Infrastructure**:
+  - Enforced `trust proxy 1` in Express for accurate reverse-proxy IP rate limiting behind load balancers.
+  - Dynamically derived rate limiter retry messages from `options.windowMs`.
+  - Added 72-byte password length constraint in Zod validation and Mongoose model to protect against bcrypt truncation.
+  - Hardened bcrypt dummy hash to valid cost-12 60-character string to guarantee constant-time responses.
+  - Enforced cookie expiration derived from JWT `exp` claim and made cookie `SameSite` configurable.
+  - Enforced loopback binding `127.0.0.1:27017` on Docker Compose MongoDB service and required `${JWT_SECRET}`.
+  - Upgraded server Dockerfile base image to `node:22-alpine` for `pdfjs-dist@6.4.299` compatibility.
+  - Hardened client Dockerfile with build-arg URL validation and non-root `USER nginx` execution.
+  - Added HTTP security headers (`X-Frame-Options`, `X-Content-Type-Options`, `X-XSS-Protection`, `Referrer-Policy`) to client static asset cache blocks.
+- **Frontend & Accessibility**:
+  - Prevented session check race conditions and superseded requests using auth operation sequence counters.
+  - Distinguished 401 unauthenticated sessions from transport/5xx failures in `AuthContext` with connection retry UI.
+  - Guaranteed cookie clearance on logout before clearing client state.
+  - Added screen-reader accessibility (`aria-invalid`, `aria-describedby`) to Login and Register inputs.
+  - Mapped backend Zod validation `err.details` onto specific form fields in Register page.
+  - Matched client email validation regex with backend standard.
+  - Prevented empty state flashing when error banners are displayed in History page.
+  - Recalculated pagination `totalPages` on analysis deletion.
+  - Separated report deletion errors from load errors in `AnalysisReport` to keep loaded data visible.
+  - Added focus containment assertions in `ConfirmModal` accessibility tests.
+  - Added failure-path test coverage for History API get and delete operations.
+  - Added header navigation tests covering guest/auth states and Sign Out redirection.
+  - Added `prefers-reduced-motion: reduce` override for loading spinners.
+
 ## [0.1.0] - 2026-10-15
 ### Added
 - Milestone 0: Scaffolded server and client packages
@@ -61,9 +89,52 @@
 - `Analysis` Mongoose model storing privacy-preserving SHA-256 `resumeHash`, truncated `jdSnippet`, score, breakdown, matched/missing keywords, and optional AI suggestions
 - Strict raw resume text exclusion from the database and response payloads to safeguard candidate privacy
 - Analyses CRUD routes: `POST /api/v1/analyses`, `GET /api/v1/analyses` (paginated), `GET /api/v1/analyses/:id`, and `DELETE /api/v1/analyses/:id`
+- Rate limiter for `POST /api/v1/analyses` (10 requests / 10 minutes per IP) guarding against compute exhaustion
 - IDOR defenses returning 404 `NOT_FOUND` on non-owner access or deletion attempts
-- Rate limiter restricting `POST /analyses` to 10 requests per hour per authenticated user returning 429 `RATE_LIMITED`
 - Vitest unit and integration test suites covering AI-1..AI-6 and API-1..API-8
+
+## [0.6.0] - 2026-10-17
+### Added
+- Milestone 5: Frontend Product (UI-1..UI-8)
+- `JdTextarea` component with accessible character count (50–10,000 chars), live boundary guidance, and input validation (UI-1)
+- Interactive analysis submission with loading state, button disabling, and accessible loading spinner (UI-2)
+- Centralized error banner presentation for upload, API, and validation errors (UI-3)
+- `ScoreGauge` SVG circular score meter with animated stroke, color-coded tiers (Strong, Moderate, Needs Optimization), and accessible `role="meter"` semantics (UI-4)
+- `BreakdownBars` visualizer for Keyword Match (60%), Section Structure (20%), Readability (10%), and Impact (10%)
+- `KeywordChips` component with tabbed views for Matched (green) and Missing (amber/red) ATS taxonomy skills (UI-5)
+- `BulletCompare` component with clipboard copy functionality (`navigator.clipboard.writeText`), visual "Copied!" confirmation, and screen reader live notification (UI-6)
+- `AiSuggestions` section presenting AI-identified missing skills, tactical recommendations, and bullet point rewrites
+- `DegradedAiBanner` informing candidates that deterministic scoring is fully intact when AI services are unavailable
+- `History` view (`/history`) with paginated analysis cards, score badges, job description snippets, and delete action
+- Accessible `ConfirmModal` dialog with focus trapping, Escape key dismiss, and focus restoration for report deletion (UI-7)
+- Comprehensive keyboard accessibility, visible `:focus-visible` rings, ARIA labels, and responsive layout for screens down to 360px (UI-8)
+- Modular `ErrorBoundary` catching and isolating runtime rendering crashes with graceful reload/retry actions
+- Vitest and React Testing Library test suites in client covering UI-1 through UI-8 (29 tests passing)
+
+## [0.7.0] - 2026-10-17
+### Added
+- Milestone 6: Security Hardening, Audit & Performance Benchmarking (SEC-1..SEC-10)
+- Execution and validation of `/review-security` checklist with 100% PASS evidence across all 10 criteria
+- Comprehensive security test suite (`server/tests/security.test.js`) verifying Helmet headers, cookie flags, password redaction, request ID propagation, and 404 error consistency
+- Strict dynamic CORS allowlist enforcing `CLIENT_ORIGIN` with credentials and rejecting unauthorized origins (SEC-9)
+- MongoDB index initialization and verification for `User` (unique lowercase email) and `Analysis` (`{ userId: 1, createdAt: -1 }`) compound indexes
+- Enhanced graceful shutdown with connection draining and 10-second unref force exit timeout on `SIGTERM` / `SIGINT`
+- Autocannon load testing benchmark (`server/tests/load/loadTest.js`): 50 RPS for 30s with mocked Gemini, achieving p97.5 latency of 33ms (< 300ms threshold) and 100% 2xx responses (1,500/1,500 requests)
+- Zero high or critical vulnerabilities verified across root, `server/`, and `client/` packages (`npm audit`)
+
+## [0.8.0] - 2026-10-17
+### Added
+- Milestone 7: Production Deployment, Ops & Release Workflow (DEP-1..DEP-5)
+- Multi-stage non-root `server/Dockerfile` using `node:20-alpine`, `USER node`, and built-in Docker `HEALTHCHECK` (DEP-1)
+- Multi-stage `client/Dockerfile` with Nginx Alpine static serving, gzip compression, and SPA routing fallback (`client/nginx.conf`)
+- `docker-compose.yml` for local container orchestration across Express server, React client, and MongoDB 7.0
+- `render.yaml` Blueprint configuration for automated Render deployment with environment synchronization and health check path
+- `client/vercel.json` and root `vercel.json` with SPA rewrites, clean URLs, and strict HTTP security headers
+- Comprehensive production deployment documentation and environment checklist in `docs/sdd/09-deployment.md` (DEP-2)
+- Automated deployment acceptance smoke test (`scripts/smoke-test.js`) performing Dockerfile configuration checks and verifying DEP-2 through DEP-5
+- Documented 1-click rollback procedures for Vercel and Render deployments (DEP-5)
+- Automated version release helper (`scripts/release.js`) and updated `/release` workflow in `.agent/workflows/release.md`
+- Completely revised `README.md` with badges, live demo URLs, Mermaid system architecture diagram, environment variables reference, and API specifications
 
 
 

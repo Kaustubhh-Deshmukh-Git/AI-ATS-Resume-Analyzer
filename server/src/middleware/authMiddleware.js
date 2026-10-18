@@ -9,11 +9,7 @@ import { COOKIE_NAME } from '../utils/cookie.js';
  */
 export const requireAuth = async (req, _res, next) => {
   try {
-    let token = req.cookies?.[COOKIE_NAME];
-
-    if (!token && req.headers.authorization?.startsWith('Bearer ')) {
-      token = req.headers.authorization.split(' ')[1];
-    }
+    const token = req.cookies?.[COOKIE_NAME];
 
     if (!token) {
       if (!req.complete && req.readable) {

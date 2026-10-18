@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 
+const EMAIL_REGEX = /^(?:[-A-Za-z0-9_'+]+\.)*[-A-Za-z0-9_'+]*[-A-Za-z0-9_+]+@(?:[A-Za-z0-9][-A-Za-z0-9]*\.)+[A-Za-z]{2,}$/;
+
 export default function Register() {
   const navigate = useNavigate();
-  const { user, register } = useAuth();
+  const { user, register, loading } = useAuth();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -42,7 +44,7 @@ export default function Register() {
 
     if (!email) {
       errors.email = 'Email address is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    } else if (!EMAIL_REGEX.test(email)) {
       errors.email = 'Please enter a valid email address';
     }
 
@@ -96,13 +98,47 @@ export default function Register() {
           email: 'An account with this email already exists',
         }));
         setGeneralError('An account with this email already exists');
+      } else if (err.details && Array.isArray(err.details) && err.details.length > 0) {
+        const mappedErrors = {};
+        err.details.forEach((d) => {
+          if (d.field) {
+            mappedErrors[d.field] = d.message;
+          }
+        });
+        setFieldErrors((prev) => ({ ...prev, ...mappedErrors }));
+        setGeneralError(err.message || 'Validation failed. Please check your details.');
       } else {
-        setGeneralError(err.message || 'Registration failed. Please check your details.');
+        const message =
+          err.code === 'NETWORK_ERROR'
+            ? 'Unable to connect to the server. Please check your internet connection.'
+            : err.message || 'Registration failed. Please check your details.';
+        setGeneralError(message);
       }
     } finally {
       setSubmitting(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div
+        role="status"
+        aria-live="polite"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '50vh',
+          gap: '1rem',
+        }}
+        id="register-loading-state"
+      >
+        <div className="spinner" style={{ width: '2.5rem', height: '2.5rem' }} />
+        <p style={{ color: 'var(--text-secondary)' }}>Verifying session...</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ maxWidth: '420px', margin: '3rem auto' }}>
@@ -140,9 +176,15 @@ export default function Register() {
               value={formData.name}
               onChange={handleChange}
               disabled={submitting}
+              aria-invalid={Boolean(fieldErrors.name)}
+              aria-describedby={fieldErrors.name ? 'name-error' : undefined}
               className={`form-input ${fieldErrors.name ? 'is-invalid' : ''}`}
             />
-            {fieldErrors.name && <span className="field-error">{fieldErrors.name}</span>}
+            {fieldErrors.name && (
+              <span className="field-error" id="name-error">
+                {fieldErrors.name}
+              </span>
+            )}
           </div>
 
           <div className="form-group">
@@ -158,9 +200,15 @@ export default function Register() {
               value={formData.email}
               onChange={handleChange}
               disabled={submitting}
+              aria-invalid={Boolean(fieldErrors.email)}
+              aria-describedby={fieldErrors.email ? 'email-error' : undefined}
               className={`form-input ${fieldErrors.email ? 'is-invalid' : ''}`}
             />
-            {fieldErrors.email && <span className="field-error">{fieldErrors.email}</span>}
+            {fieldErrors.email && (
+              <span className="field-error" id="email-error">
+                {fieldErrors.email}
+              </span>
+            )}
           </div>
 
           <div className="form-group">
@@ -176,9 +224,15 @@ export default function Register() {
               value={formData.password}
               onChange={handleChange}
               disabled={submitting}
+              aria-invalid={Boolean(fieldErrors.password)}
+              aria-describedby={fieldErrors.password ? 'password-error' : undefined}
               className={`form-input ${fieldErrors.password ? 'is-invalid' : ''}`}
             />
-            {fieldErrors.password && <span className="field-error">{fieldErrors.password}</span>}
+            {fieldErrors.password && (
+              <span className="field-error" id="password-error">
+                {fieldErrors.password}
+              </span>
+            )}
 
             {/* Real-time criteria checklist */}
             <div className="password-criteria" style={{ marginTop: '0.25rem' }}>

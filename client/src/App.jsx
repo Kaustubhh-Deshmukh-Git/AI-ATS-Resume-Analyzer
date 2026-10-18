@@ -1,18 +1,26 @@
-import { BrowserRouter, Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import ErrorBoundary from './components/ErrorBoundary.jsx';
 import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import Dashboard from './pages/Dashboard.jsx';
+import AnalysisReport from './pages/AnalysisReport.jsx';
+import History from './pages/History.jsx';
+import NotFound from './pages/NotFound.jsx';
 
-function Navigation() {
-  const { user, logout } = useAuth();
+export function Navigation() {
+  const { user, logout, loading } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await logout();
-    navigate('/login');
+    try {
+      await logout();
+      navigate('/login');
+    } catch {
+      // Handled in context
+    }
   };
 
   return (
@@ -31,43 +39,104 @@ function Navigation() {
         >
           Dashboard
         </NavLink>
-        {user ? (
-          <>
-            <div className="user-badge" title={user.email} id="nav-user-badge">
-              <span className="user-avatar">{user.name?.charAt(0).toUpperCase() || 'U'}</span>
-              <span>{user.name || user.email}</span>
-            </div>
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="btn btn-secondary"
-              id="nav-logout-btn"
-              style={{ padding: '0.45rem 1rem', fontSize: '0.875rem' }}
-            >
-              Sign Out
-            </button>
-          </>
-        ) : (
-          <>
-            <NavLink
-              to="/login"
-              className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-              id="nav-login-link"
-            >
-              Login
-            </NavLink>
-            <Link
-              to="/register"
-              className="btn btn-primary"
-              id="nav-signup-link"
-              style={{ padding: '0.45rem 1rem' }}
-            >
-              Sign Up
-            </Link>
-          </>
+        {!loading && (
+          user ? (
+            <>
+              <NavLink
+                to="/history"
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                id="nav-history-link"
+              >
+                History
+              </NavLink>
+              <div className="user-badge" title={user.email} id="nav-user-badge">
+                <span className="user-avatar">{user.name?.charAt(0).toUpperCase() || 'U'}</span>
+                <span>{user.name || user.email}</span>
+              </div>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="btn btn-secondary"
+                id="nav-logout-btn"
+                style={{ padding: '0.45rem 1rem', fontSize: '0.875rem' }}
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <>
+              <NavLink
+                to="/login"
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                id="nav-login-link"
+              >
+                Login
+              </NavLink>
+              <Link
+                to="/register"
+                className="btn btn-primary"
+                id="nav-signup-link"
+                style={{ padding: '0.45rem 1rem' }}
+              >
+                Sign Up
+              </Link>
+            </>
+          )
         )}
       </nav>
     </header>
+  );
+}
+
+function AppLayout() {
+  const location = useLocation();
+
+  return (
+    <div className="app-container">
+      <Navigation />
+
+      <main className="main-content">
+        <ErrorBoundary key={location.pathname}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/analyses/:id"
+              element={
+                <ProtectedRoute>
+                  <AnalysisReport />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/history"
+              element={
+                <ProtectedRoute>
+                  <History />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </ErrorBoundary>
+      </main>
+
+      <footer className="footer">
+        <p>
+          ResumeIQ &copy; {new Date().getFullYear()} — ATS Resume Analyzer & AI Optimization
+          Engine
+        </p>
+      </footer>
+    </div>
   );
 }
 
@@ -75,32 +144,7 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <div className="app-container">
-          <Navigation />
-
-          <main className="main-content">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </main>
-
-          <footer className="footer">
-            <p>
-              ResumeIQ &copy; {new Date().getFullYear()} — ATS Resume Analyzer & AI Optimization
-              Engine
-            </p>
-          </footer>
-        </div>
+        <AppLayout />
       </BrowserRouter>
     </AuthProvider>
   );

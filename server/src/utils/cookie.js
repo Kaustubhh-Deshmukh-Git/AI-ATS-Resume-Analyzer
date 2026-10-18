@@ -1,25 +1,37 @@
+import jwt from 'jsonwebtoken';
 import { env } from '../config/env.js';
 
 export const COOKIE_NAME = 'token';
 
 /**
  * Standard security options for the authentication JWT cookie.
+ * @param {object} [overrides={}]
  */
-export const getAuthCookieOptions = () => ({
+export const getAuthCookieOptions = (overrides = {}) => ({
   httpOnly: true,
-  sameSite: 'lax',
+  sameSite: process.env.COOKIE_SAMESITE || 'lax',
   secure: env.NODE_ENV === 'production',
   maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
   path: '/',
+  ...overrides,
 });
 
 /**
- * Set the auth cookie on the response.
+ * Set the auth cookie on the response, deriving maxAge from token expiration.
  * @param {import('express').Response} res
  * @param {string} token
  */
 export const setAuthCookie = (res, token) => {
-  res.cookie(COOKIE_NAME, token, getAuthCookieOptions());
+  let maxAge = 60 * 60 * 1000;
+  try {
+    const decoded = jwt.decode(token);
+    if (decoded?.exp) {
+      maxAge = Math.max(0, decoded.exp * 1000 - Date.now());
+    }
+  } catch {
+    // Keep fallback maxAge
+  }
+  res.cookie(COOKIE_NAME, token, getAuthCookieOptions({ maxAge }));
 };
 
 /**

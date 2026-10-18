@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import FileDropzone from '../src/components/FileDropzone.jsx';
 import Dashboard from '../src/pages/Dashboard.jsx';
 import api from '../src/api/http.js';
@@ -141,7 +142,11 @@ describe('Milestone 2 - Client File Upload & Parse Component', () => {
         charCount: 280,
       });
 
-      render(<Dashboard />);
+      render(
+        <MemoryRouter>
+          <Dashboard />
+        </MemoryRouter>
+      );
 
       expect(screen.getByRole('heading', { name: /Resume Analyzer/i })).toBeInTheDocument();
 

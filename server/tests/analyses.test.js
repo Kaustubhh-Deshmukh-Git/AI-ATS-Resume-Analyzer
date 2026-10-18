@@ -13,11 +13,50 @@ describe('Analyses API & Persistence (Milestone 4 - API-1..API-8)', () => {
   let userACookie;
   let userBCookie;
   let userAId;
+  let userBId;
 
   const validResumeText = goldenPairs[0].resumeText;
   const validJdText = goldenPairs[0].jobDescription;
 
+  let originalFetch;
+
   beforeAll(async () => {
+    originalFetch = global.fetch;
+    global.fetch = async (url, options) => {
+      if (typeof url === 'string' && url.includes('generativelanguage.googleapis.com')) {
+        return {
+          ok: true,
+          status: 200,
+          headers: new Headers({ 'content-type': 'application/json' }),
+          json: async () => ({
+            candidates: [
+              {
+                content: {
+                  parts: [
+                    {
+                      text: JSON.stringify({
+                        summary: 'Strong technical alignment.',
+                        missingSkills: ['Kubernetes', 'AWS'],
+                        optimizationTips: ['Highlight cloud delivery experience.'],
+                        bulletImprovements: [
+                          {
+                            original: 'Wrote APIs',
+                            improved: 'Architected high-throughput microservices.',
+                            reason: 'Measurable business impact.',
+                          },
+                        ],
+                      }),
+                    },
+                  ],
+                },
+              },
+            ],
+          }),
+        };
+      }
+      return originalFetch(url, options);
+    };
+
     mongoServer = await MongoMemoryServer.create();
     await mongoose.connect(mongoServer.getUri());
 
@@ -37,9 +76,11 @@ describe('Analyses API & Persistence (Milestone 4 - API-1..API-8)', () => {
       password: 'Password123!',
     });
     userBCookie = resB.headers['set-cookie'];
+    userBId = resB.body.user.id;
   });
 
   afterAll(async () => {
+    global.fetch = originalFetch;
     await mongoose.disconnect();
     await mongoServer.stop();
   });
@@ -130,26 +171,56 @@ describe('Analyses API & Persistence (Milestone 4 - API-1..API-8)', () => {
   describe('GET /api/v1/analyses (List, Pagination & Raw Text Exclusion)', () => {
     beforeEach(async () => {
       // Create 3 analyses for User A
-      for (let i = 1; i <= 3; i++) {
-        await request(app)
-          .post('/api/v1/analyses')
-          .set('Cookie', userACookie)
-          .send({
-            resumeText: validResumeText,
-            jobDescription: validJdText,
-            title: `Analysis A-${i}`,
-          });
-      }
-
-      // Create 1 analysis for User B
-      await request(app)
-        .post('/api/v1/analyses')
-        .set('Cookie', userBCookie)
-        .send({
-          resumeText: validResumeText,
-          jobDescription: validJdText,
+      await Promise.all([
+        Analysis.create({
+          userId: userAId,
+          title: 'Analysis A-1',
+          resumeHash: 'hash-a1',
+          jdSnippet: 'Target JD snippet A-1',
+          score: 82,
+          breakdown: { keyword: 50, sections: 16, readability: 8, impact: 8 },
+          matched: ['React', 'Node.js'],
+          missing: ['Docker'],
+          aiStatus: 'ok',
+          ai: null,
+        }),
+        Analysis.create({
+          userId: userAId,
+          title: 'Analysis A-2',
+          resumeHash: 'hash-a2',
+          jdSnippet: 'Target JD snippet A-2',
+          score: 85,
+          breakdown: { keyword: 52, sections: 17, readability: 8, impact: 8 },
+          matched: ['TypeScript', 'Express'],
+          missing: ['Kubernetes'],
+          aiStatus: 'ok',
+          ai: null,
+        }),
+        Analysis.create({
+          userId: userAId,
+          title: 'Analysis A-3',
+          resumeHash: 'hash-a3',
+          jdSnippet: 'Target JD snippet A-3',
+          score: 88,
+          breakdown: { keyword: 54, sections: 18, readability: 8, impact: 8 },
+          matched: ['React', 'TypeScript'],
+          missing: ['AWS'],
+          aiStatus: 'ok',
+          ai: null,
+        }),
+        Analysis.create({
+          userId: userBId,
           title: 'Analysis B-1',
-        });
+          resumeHash: 'hash-b1',
+          jdSnippet: 'Target JD snippet B-1',
+          score: 75,
+          breakdown: { keyword: 45, sections: 15, readability: 8, impact: 7 },
+          matched: ['Python'],
+          missing: ['Django'],
+          aiStatus: 'ok',
+          ai: null,
+        }),
+      ]);
     });
 
     it('API-4: returns paginated list of analyses with page, limit, total, totalPages', async () => {

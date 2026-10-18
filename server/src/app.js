@@ -14,13 +14,24 @@ import analysisRoutes from './routes/analysisRoutes.js';
 
 const app = express();
 
+// Trust reverse proxy (e.g. Render, Nginx) for accurate client IP in rate limiting
+app.set('trust proxy', 1);
+
 // Security headers
 app.use(helmet());
 
-// CORS configuration (allowlist from CLIENT_ORIGIN with credentials)
+// CORS configuration (allowlist strictly from CLIENT_ORIGIN with credentials)
+const allowedOrigins = [env.CLIENT_ORIGIN];
+
 app.use(
   cors({
-    origin: env.CLIENT_ORIGIN,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, false);
+      }
+    },
     credentials: true,
   })
 );
