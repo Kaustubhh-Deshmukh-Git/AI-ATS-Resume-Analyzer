@@ -9,13 +9,18 @@
  * @param {object} props.breakdown - Breakdown points object { keyword, sections, readability, impact }
  */
 export default function BreakdownBars({ breakdown = {} }) {
+  const rawKeyword = breakdown.keyword ?? 0;
+  const rawSections = breakdown.sections ?? 0;
+  const rawReadability = breakdown.readability ?? 0;
+  const rawImpact = breakdown.impact ?? 0;
+
   const categories = [
     {
       key: 'keyword',
       label: 'Keyword Match',
       weight: '60%',
       max: 60,
-      value: breakdown.keyword ?? 0,
+      value: rawKeyword * 0.6,
       description: 'Taxonomy skills, languages, and technical keywords aligned with the job description',
       color: '#6366f1',
     },
@@ -24,7 +29,7 @@ export default function BreakdownBars({ breakdown = {} }) {
       label: 'Section Structure',
       weight: '20%',
       max: 20,
-      value: breakdown.sections ?? 0,
+      value: rawSections * 0.2,
       description: 'Standard resume headings (Experience, Education, Skills, Projects, Summary)',
       color: '#3b82f6',
     },
@@ -33,7 +38,7 @@ export default function BreakdownBars({ breakdown = {} }) {
       label: 'Readability & Layout',
       weight: '10%',
       max: 10,
-      value: breakdown.readability ?? 0,
+      value: rawReadability * 0.1,
       description: 'Concise phrasing, active voice, sentence length, and parse clarity',
       color: '#10b981',
     },
@@ -42,7 +47,7 @@ export default function BreakdownBars({ breakdown = {} }) {
       label: 'Impact & Metrics',
       weight: '10%',
       max: 10,
-      value: breakdown.impact ?? 0,
+      value: rawImpact * 0.1,
       description: 'Measurable achievements, numbers, percentages, and strong action verbs',
       color: '#a855f7',
     },
@@ -75,6 +80,7 @@ export default function BreakdownBars({ breakdown = {} }) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
         {categories.map((cat) => {
           const percentage = cat.max > 0 ? Math.min(100, (cat.value / cat.max) * 100) : 0;
+          const displayValue = Math.round(cat.value * 10) / 10;
 
           return (
             <div key={cat.key} className="breakdown-item" id={`breakdown-${cat.key}`}>
@@ -99,7 +105,7 @@ export default function BreakdownBars({ breakdown = {} }) {
                   </span>
                 </div>
                 <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>
-                  <span style={{ color: 'var(--text-primary)' }}>{Math.round(cat.value * 10) / 10}</span>
+                  <span style={{ color: 'var(--text-primary)' }}>{displayValue}</span>
                   <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}> / {cat.max} pts</span>
                 </div>
               </div>
@@ -110,7 +116,7 @@ export default function BreakdownBars({ breakdown = {} }) {
                 aria-valuenow={Math.round(cat.value)}
                 aria-valuemin="0"
                 aria-valuemax={cat.max}
-                aria-label={`${cat.label}: ${cat.value} out of ${cat.max} points`}
+                aria-label={`${cat.label}: ${displayValue} out of ${cat.max} points`}
                 style={{
                   height: '8px',
                   width: '100%',

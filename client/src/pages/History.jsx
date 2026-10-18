@@ -19,6 +19,7 @@ export default function History() {
     let ignore = false;
 
     async function load() {
+      setError(null);
       try {
         const response = await api.get(`/analyses?page=${page}&limit=10`);
         if (!ignore) {
@@ -47,7 +48,7 @@ export default function History() {
   }, [page]);
 
   const handleDeleteConfirm = async () => {
-    if (!deleteTarget) return;
+    if (!deleteTarget || isDeleting) return;
 
     setIsDeleting(true);
     try {
@@ -58,10 +59,14 @@ export default function History() {
       if (analyses.length === 1 && page > 1) {
         setPage((prev) => prev - 1);
       } else {
-        setPagination((prev) => ({
-          ...prev,
-          total: Math.max(0, prev.total - 1),
-        }));
+        setPagination((prev) => {
+          const newTotal = Math.max(0, prev.total - 1);
+          return {
+            ...prev,
+            total: newTotal,
+            totalPages: Math.max(1, Math.ceil(newTotal / 10)),
+          };
+        });
       }
     } catch (err) {
       setError(err.message || 'Failed to delete analysis.');
@@ -122,48 +127,50 @@ export default function History() {
         </div>
       ) : analyses.length === 0 ? (
         /* Empty State */
-        <div
-          className="glass-card"
-          style={{
-            textAlign: 'center',
-            padding: '3.5rem 2rem',
-            maxWidth: '600px',
-            margin: '2rem auto',
-          }}
-          id="history-empty-state"
-        >
+        !error ? (
           <div
+            className="glass-card"
             style={{
-              width: '4rem',
-              height: '4rem',
-              borderRadius: '50%',
-              background: 'rgba(99, 102, 241, 0.12)',
-              border: '1px solid rgba(99, 102, 241, 0.3)',
-              color: 'var(--accent-primary)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '1.75rem',
-              margin: '0 auto 1.25rem',
+              textAlign: 'center',
+              padding: '3.5rem 2rem',
+              maxWidth: '600px',
+              margin: '2rem auto',
             }}
+            id="history-empty-state"
           >
-            📋
+            <div
+              style={{
+                width: '4rem',
+                height: '4rem',
+                borderRadius: '50%',
+                background: 'rgba(99, 102, 241, 0.12)',
+                border: '1px solid rgba(99, 102, 241, 0.3)',
+                color: 'var(--accent-primary)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.75rem',
+                margin: '0 auto 1.25rem',
+              }}
+            >
+              📋
+            </div>
+            <h3 style={{ fontSize: '1.35rem', marginBottom: '0.5rem' }}>No Analyses Saved Yet</h3>
+            <p
+              style={{
+                color: 'var(--text-secondary)',
+                fontSize: '0.95rem',
+                marginBottom: '1.75rem',
+                lineHeight: '1.5',
+              }}
+            >
+              Upload your resume PDF and match it against any job description to generate your first ATS score and AI optimization report.
+            </p>
+            <Link to="/dashboard" className="btn btn-primary" id="empty-state-cta-btn">
+              Analyze Resume Now
+            </Link>
           </div>
-          <h3 style={{ fontSize: '1.35rem', marginBottom: '0.5rem' }}>No Analyses Saved Yet</h3>
-          <p
-            style={{
-              color: 'var(--text-secondary)',
-              fontSize: '0.95rem',
-              marginBottom: '1.75rem',
-              lineHeight: '1.5',
-            }}
-          >
-            Upload your resume PDF and match it against any job description to generate your first ATS score and AI optimization report.
-          </p>
-          <Link to="/dashboard" className="btn btn-primary" id="empty-state-cta-btn">
-            Analyze Resume Now
-          </Link>
-        </div>
+        ) : null
       ) : (
         /* Analyses List */
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }} id="history-list-container">
@@ -199,7 +206,6 @@ export default function History() {
                 style={{
                   padding: '1.25rem 1.5rem',
                   display: 'flex',
-                  alignItems: 'center',
                   justifyContent: 'space-between',
                   flexWrap: 'wrap',
                   gap: '1rem',
@@ -358,6 +364,7 @@ export default function History() {
         onConfirm={handleDeleteConfirm}
         onClose={() => setDeleteTarget(null)}
         isDestructive={true}
+        isBusy={isDeleting}
       />
     </div>
   );

@@ -20,8 +20,12 @@ const rootDir = path.resolve(__dirname, '..');
 const args = process.argv.slice(2);
 function getArg(flag, fallback) {
   const index = args.indexOf(flag);
-  if (index !== -1 && args[index + 1]) {
-    return args[index + 1];
+  if (index !== -1) {
+    const value = args[index + 1];
+    if (!value || value.startsWith('--')) {
+      throw new Error(`Missing value for ${flag}`);
+    }
+    return value;
   }
   return fallback;
 }
@@ -55,12 +59,15 @@ async function runSmokeTests() {
       recordResult('DEP-1', 'Docker Configuration', false, 'Missing server/Dockerfile or docker-compose.yml');
     } else {
       const dockerfile = fs.readFileSync(dockerfilePath, 'utf8');
-      const hasMultiStage = dockerfile.includes('FROM') && dockerfile.includes('AS');
-      const hasNonRoot = dockerfile.includes('USER node');
-      const hasHealthcheck = dockerfile.includes('HEALTHCHECK');
+      const fromDirectives = dockerfile.split('\n').filter((l) => /^\s*FROM\s+/i.test(l));
+      const hasMultiStage = fromDirectives.length >= 2;
+      const hasNonRoot = /^\s*USER\s+node/m.test(dockerfile);
+      const hasHealthcheck = /^\s*HEALTHCHECK/m.test(dockerfile);
+      const composeContent = fs.readFileSync(composePath, 'utf8');
+      const hasCompose = composeContent.includes('services:') && composeContent.includes('server:');
 
-      if (hasMultiStage && hasNonRoot && hasHealthcheck) {
-        recordResult('DEP-1', 'Docker Configuration', true, 'Multi-stage, non-root USER node, HEALTHCHECK present');
+      if (hasMultiStage && hasNonRoot && hasHealthcheck && hasCompose) {
+        recordResult('DEP-1', 'Docker Configuration', true, `Multi-stage (${fromDirectives.length} stages), non-root USER node, HEALTHCHECK present`);
       } else {
         recordResult('DEP-1', 'Docker Configuration', false, `Incomplete Dockerfile practices: multi-stage=${hasMultiStage}, non-root=${hasNonRoot}, healthcheck=${hasHealthcheck}`);
       }
@@ -79,11 +86,17 @@ async function runSmokeTests() {
 
     if (fs.existsSync(renderPath) && fs.existsSync(vercelPath) && fs.existsSync(sdd09Path)) {
       const render = fs.readFileSync(renderPath, 'utf8');
-      const hasSecrets = render.includes('MONGODB_URI') && render.includes('JWT_SECRET') && render.includes('GEMINI_API_KEY');
-      if (hasSecrets) {
-        recordResult('DEP-2', 'Production Environment Documented', true, 'render.yaml, vercel.json, and docs/sdd/09-deployment.md validated');
+      const vercel = JSON.parse(fs.readFileSync(vercelPath, 'utf8'));
+      const sdd09 = fs.readFileSync(sdd09Path, 'utf8');
+
+      const hasRenderEnv = ['MONGODB_URI', 'JWT_SECRET', 'GEMINI_API_KEY'].every((k) => render.includes(k));
+      const hasVercelRewrites = Array.isArray(vercel.rewrites) && vercel.rewrites.length > 0;
+      const hasSddChecklist = sdd09.includes('Production Environment Checklist');
+
+      if (hasRenderEnv && hasVercelRewrites && hasSddChecklist) {
+        recordResult('DEP-2', 'Production Environment Documented', true, 'render.yaml env keys, vercel.json rewrites, and docs/sdd/09-deployment.md validated');
       } else {
-        recordResult('DEP-2', 'Production Environment Documented', false, 'render.yaml missing critical env mappings');
+        recordResult('DEP-2', 'Production Environment Documented', false, 'Incomplete production configuration across deployment artifacts');
       }
     } else {
       recordResult('DEP-2', 'Production Environment Documented', false, 'Missing render.yaml, vercel.json, or docs/sdd/09-deployment.md');
@@ -97,11 +110,11 @@ async function runSmokeTests() {
   // ------------------------------------------------------------------------
   try {
     const healthUrl = `${apiUrl}/health`;
-    const response = await fetch(healthUrl, { method: 'GET' });
-    if (response.ok) {
+    const response = await fetch(healthUrl, { method: 'GET', signal: AbortSignal.timeout(5000) });
+    if (response.status === 200) {
       const body = await response.json();
       if (body && body.status === 'ok') {
-        recordResult('DEP-3', 'Live API Health Check', true, `Endpoint ${healthUrl} returned HTTP ${response.status} { status: 'ok' }`);
+        recordResult('DEP-3', 'Live API Health Check', true, `Endpoint ${healthUrl} returned HTTP 200 { status: 'ok' }`);
       } else {
         recordResult('DEP-3', 'Live API Health Check', false, `Endpoint ${healthUrl} returned unexpected body: ${JSON.stringify(body)}`);
       }
@@ -124,15 +137,16 @@ async function runSmokeTests() {
         'Access-Control-Request-Method': 'GET',
         'Access-Control-Request-Headers': 'Content-Type',
       },
+      signal: AbortSignal.timeout(5000),
     });
 
     const allowOrigin = response.headers.get('access-control-allow-origin');
     const allowCreds = response.headers.get('access-control-allow-credentials');
 
-    if (allowOrigin === clientOrigin && allowCreds === 'true') {
+    if (response.ok && allowOrigin === clientOrigin && allowCreds === 'true') {
       recordResult('DEP-4', 'CORS Verification', true, `Preflight granted for Origin ${clientOrigin} (credentials: true)`);
     } else {
-      recordResult('DEP-4', 'CORS Verification', false, `CORS rejected or mismatch: origin=${allowOrigin}, credentials=${allowCreds}`);
+      recordResult('DEP-4', 'CORS Verification', false, `CORS rejected or mismatch: status=${response.status}, origin=${allowOrigin}, credentials=${allowCreds}`);
     }
   } catch (err) {
     recordResult('DEP-4', 'CORS Verification', false, `CORS check failed: ${err.message}`);
@@ -144,12 +158,13 @@ async function runSmokeTests() {
   try {
     const sdd09Path = path.join(rootDir, 'docs', 'sdd', '09-deployment.md');
     const content = fs.readFileSync(sdd09Path, 'utf8');
-    const hasRollback = content.toLowerCase().includes('rollback');
+    const hasVercelRollback = content.includes('Vercel Rollback');
+    const hasRenderRollback = content.includes('Render Rollback') && content.includes('git revert');
 
-    if (hasRollback) {
-      recordResult('DEP-5', 'Rollback Procedure Documented', true, 'Documented in docs/sdd/09-deployment.md (git commit redeploy & tag tracking)');
+    if (hasVercelRollback && hasRenderRollback) {
+      recordResult('DEP-5', 'Rollback Procedure Documented', true, 'Documented in docs/sdd/09-deployment.md (Vercel instant rollback & Render git revert redeploy)');
     } else {
-      recordResult('DEP-5', 'Rollback Procedure Documented', false, 'docs/sdd/09-deployment.md missing rollback instructions');
+      recordResult('DEP-5', 'Rollback Procedure Documented', false, 'docs/sdd/09-deployment.md missing structured rollback instructions');
     }
   } catch (err) {
     recordResult('DEP-5', 'Rollback Procedure Documented', false, err.message);

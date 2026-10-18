@@ -16,7 +16,7 @@ const rootDir = path.resolve(__dirname, '..');
 
 const targetVersion = process.argv[2];
 
-if (!targetVersion || !/^\d+\.\d+\.\d+/.test(targetVersion)) {
+if (!targetVersion || !/^\d+\.\d+\.\d+$/.test(targetVersion)) {
   console.error('Usage: node scripts/release.js <x.y.z>');
   process.exit(1);
 }
@@ -50,9 +50,14 @@ if (fs.existsSync(changelogPath)) {
       '## [Unreleased]',
       `## [Unreleased]\n\n${releaseHeader}`
     );
-    fs.writeFileSync(changelogPath, changelog);
-    console.log(`Updated CHANGELOG.md with ${releaseHeader}`);
+  } else {
+    changelog = changelog.replace(
+      '# Changelog',
+      `# Changelog\n\n${releaseHeader}`
+    );
   }
+  fs.writeFileSync(changelogPath, changelog);
+  console.log(`Updated CHANGELOG.md with ${releaseHeader}`);
 }
 
 console.log('\n✅ Version bumped successfully!');
@@ -60,4 +65,4 @@ console.log('\nNext release steps:');
 console.log(`  git add server/package.json client/package.json CHANGELOG.md`);
 console.log(`  git commit -m "chore(release): v${targetVersion}"`);
 console.log(`  git tag -a v${targetVersion} -m "Release v${targetVersion}"`);
-console.log(`  git push origin v${targetVersion}\n`);
+console.log(`  git push origin main v${targetVersion}\n`);

@@ -132,7 +132,7 @@ describe('Client Authentication Flow', () => {
         </AuthProvider>
       );
 
-      fireEvent.change(screen.getByLabelText(/Full Name/i), {
+      fireEvent.change(await screen.findByLabelText(/Full Name/i), {
         target: { value: 'Jane Doe' },
       });
       fireEvent.change(screen.getByLabelText(/Email Address/i), {
@@ -165,7 +165,7 @@ describe('Client Authentication Flow', () => {
         </AuthProvider>
       );
 
-      fireEvent.change(screen.getByLabelText(/Full Name/i), {
+      fireEvent.change(await screen.findByLabelText(/Full Name/i), {
         target: { value: 'Duplicate Jane' },
       });
       fireEvent.change(screen.getByLabelText(/Email Address/i), {

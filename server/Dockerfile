@@ -2,7 +2,7 @@
 # Production-ready, non-root user, minimal attack surface
 
 # Stage 1: Dependencies
-FROM node:20-alpine AS dependencies
+FROM node:22-alpine AS dependencies
 WORKDIR /app
 
 # Install build dependencies if needed (none required for pure JS/ESM)
@@ -10,7 +10,7 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts
 
 # Stage 2: Production Runner
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
 
 # Add curl for container healthcheck

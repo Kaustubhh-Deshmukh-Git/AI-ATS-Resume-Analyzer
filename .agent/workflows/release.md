@@ -17,6 +17,6 @@
    ```
 5. Push the commit and the tag to GitHub:
    ```bash
-   git push origin main --tags
+   git push origin main v<x.y.z>
    ```
    *(Note: Never force push).*

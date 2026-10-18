@@ -22,19 +22,19 @@ ResumeIQ is a production-grade, privacy-first Applicant Tracking System (ATS) re
 ## ✨ Features
 
 - **100% Deterministic ATS Engine**: Explainable scoring computed across four core weighted dimensions:
-  - **Keyword Match (40%)**: Normalized exact and stemmed token matching against the job description.
-  - **Experience Relevance (25%)**: Detection of seniority signals, action verbs, and quantifiable metrics.
-  - **Skills Coverage (20%)**: Extraction and gap analysis against common tech & domain taxonomies.
-  - **Structure & Formatting (15%)**: PDF parsability, section header hygiene, and bullet structure checks.
-- **Privacy-First Architecture (SEC-1)**: Candidate resume text is strictly processed in-memory and **never** persisted to disk or the database. Only a cryptographic SHA-256 hash is retained for auditability.
-- **AI-Powered Suggestions**: Structured generative feedback powered by Google Gemini (`gemini-3.8-flash`) using native JSON schema enforcement, automatic retries with exponential backoff, and graceful degradation fallback.
+  - **Keyword Match (60%)**: Normalized exact and alias token matching against the job description using skills taxonomy.
+  - **Section Completeness (20%)**: Structural detection of standard resume sections (Contact, Summary, Skills, Experience, Education).
+  - **Readability (10%)**: Automated sentence complexity, bullet hygiene, and parsability checks.
+  - **Quantified Impact (10%)**: Detection of action verbs and quantifiable metrics/measurements.
+- **Privacy-First Architecture (SEC-1)**: Candidate resume text is strictly processed in-memory and **never** persisted to disk or database. Only a cryptographic SHA-256 hash is retained for auditability, along with derived analysis output (job snippet, keywords, scores, and AI suggestions).
+- **AI-Powered Suggestions**: Structured generative feedback powered by Google Gemini (`gemini-2.5-flash`) using native JSON schema enforcement, automatic retries with exponential backoff, and graceful degradation fallback.
 - **Accessible UI/UX (WCAG 2.1 AA)**: Custom SVG circular score gauge (`role="meter"`), live contrast ratios, screen reader announcement live regions, keyboard accessible modals, and dark mode aesthetic.
 - **Enterprise Security Hardening**:
   - Secure httpOnly, SameSite, signed JWT cookies.
   - Strict CORS origin filtering.
   - Helmet CSP headers & sanitize-filename protections.
-  - IP-based rate limiting (100 req/15 min global; 5 req/15 min auth).
-  - High-concurrency throughput verified via Autocannon (p95 latency < 35ms @ 50 RPS).
+  - IP-based rate limiting (10 req/15 min auth; 10 req/hour for analysis generation).
+  - High-concurrency throughput verified via Autocannon (50 RPS with p95 latency < 300ms).
 
 ---
 
@@ -51,9 +51,9 @@ flowchart TD
     subgraph API["Backend API (Express on Node 20)"]
         Middleware["Security Middleware (Helmet, CORS, Rate Limit)"]
         AuthCtrl["Auth Controller (/auth)"]
-        UploadCtrl["Upload & Parse Controller (/upload)"]
+        UploadCtrl["Upload & Parse Controller (/resumes/parse)"]
         Engine["Deterministic ATS Scoring Engine"]
-        GeminiSvc["Gemini Service (gemini-3.8-flash REST)"]
+        GeminiSvc["Gemini Service (gemini-2.5-flash REST)"]
     end
 
     subgraph External["Data & AI Tier"]
@@ -148,7 +148,7 @@ docker compose up --build
 | `POST` | `/api/v1/auth/login` | Authenticate user & issue httpOnly cookie | No |
 | `GET` | `/api/v1/auth/me` | Fetch active user session profile | **Yes** |
 | `POST` | `/api/v1/auth/logout` | Clear session cookie | **Yes** |
-| `POST` | `/api/v1/upload` | Parse PDF resume into in-memory structured text | **Yes** |
+| `POST` | `/api/v1/resumes/parse` | Parse PDF resume into in-memory structured text | **Yes** |
 | `POST` | `/api/v1/analyses` | Compute deterministic score + Gemini AI suggestions | **Yes** |
 | `GET` | `/api/v1/analyses` | List user's historical analyses (paginated) | **Yes** |
 | `GET` | `/api/v1/analyses/:id` | Fetch specific analysis report | **Yes** |

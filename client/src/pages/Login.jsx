@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 
+const EMAIL_REGEX = /^(?:[-A-Za-z0-9_'+]+\.)*[-A-Za-z0-9_'+]*[-A-Za-z0-9_+]+@(?:[A-Za-z0-9][-A-Za-z0-9]*\.)+[A-Za-z]{2,}$/;
+
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,7 +31,7 @@ export default function Login() {
 
     if (!email) {
       errors.email = 'Email address is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    } else if (!EMAIL_REGEX.test(email)) {
       errors.email = 'Please enter a valid email address';
     }
 
@@ -70,7 +72,11 @@ export default function Login() {
       const destination = location.state?.from?.pathname || '/dashboard';
       navigate(destination, { replace: true });
     } catch (err) {
-      setGeneralError(err.message || 'Invalid email or password');
+      const message =
+        err.code === 'NETWORK_ERROR'
+          ? 'Unable to connect to the server. Please check your internet connection.'
+          : err.message || 'Invalid email or password';
+      setGeneralError(message);
     } finally {
       setSubmitting(false);
     }
@@ -112,9 +118,15 @@ export default function Login() {
               value={formData.email}
               onChange={handleChange}
               disabled={submitting}
+              aria-invalid={Boolean(fieldErrors.email)}
+              aria-describedby={fieldErrors.email ? 'email-error' : undefined}
               className={`form-input ${fieldErrors.email ? 'is-invalid' : ''}`}
             />
-            {fieldErrors.email && <span className="field-error">{fieldErrors.email}</span>}
+            {fieldErrors.email && (
+              <span className="field-error" id="email-error">
+                {fieldErrors.email}
+              </span>
+            )}
           </div>
 
           <div className="form-group">
@@ -130,9 +142,15 @@ export default function Login() {
               value={formData.password}
               onChange={handleChange}
               disabled={submitting}
+              aria-invalid={Boolean(fieldErrors.password)}
+              aria-describedby={fieldErrors.password ? 'password-error' : undefined}
               className={`form-input ${fieldErrors.password ? 'is-invalid' : ''}`}
             />
-            {fieldErrors.password && <span className="field-error">{fieldErrors.password}</span>}
+            {fieldErrors.password && (
+              <span className="field-error" id="password-error">
+                {fieldErrors.password}
+              </span>
+            )}
           </div>
 
           <button

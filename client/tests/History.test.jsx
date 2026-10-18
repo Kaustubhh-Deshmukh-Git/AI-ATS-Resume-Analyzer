@@ -126,4 +126,52 @@ describe('Milestone 5 - History & Deletion Flow (UI-7)', () => {
     expect(await screen.findByText(/No Analyses Saved Yet/i)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Analyze Resume Now/i })).toBeInTheDocument();
   });
+
+  it('displays error banner and does not render empty state when api.get fails', async () => {
+    api.get.mockRejectedValueOnce(new Error('Network error loading history'));
+
+    render(
+      <MemoryRouter>
+        <History />
+      </MemoryRouter>
+    );
+
+    const alertBanner = await screen.findByRole('alert');
+    expect(alertBanner).toBeInTheDocument();
+    expect(screen.getByText('Network error loading history')).toBeInTheDocument();
+    expect(screen.queryByText(/No Analyses Saved Yet/i)).not.toBeInTheDocument();
+  });
+
+  it('displays error banner and keeps item in list when api.delete fails', async () => {
+    api.get.mockResolvedValueOnce({
+      analyses: mockAnalysesList,
+      total: 2,
+      page: 1,
+      totalPages: 1,
+    });
+    api.delete.mockRejectedValueOnce(new Error('Failed to delete on server'));
+
+    render(
+      <MemoryRouter>
+        <History />
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByText('Senior Frontend Engineer - Acme Corp')).toBeInTheDocument();
+
+    const deleteBtn = screen.getByRole('button', {
+      name: /Delete analysis Senior Frontend Engineer - Acme Corp/i,
+    });
+    fireEvent.click(deleteBtn);
+
+    const confirmDeleteBtn = screen.getByRole('button', { name: 'Delete' });
+    fireEvent.click(confirmDeleteBtn);
+
+    const alertBanner = await screen.findByRole('alert');
+    expect(alertBanner).toBeInTheDocument();
+    expect(screen.getByText('Failed to delete on server')).toBeInTheDocument();
+
+    // Item should remain in the list
+    expect(screen.getByText('Senior Frontend Engineer - Acme Corp')).toBeInTheDocument();
+  });
 });

@@ -1,9 +1,6 @@
-process.env.NODE_ENV = 'test';
-
 import autocannon from 'autocannon';
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import app from '../../src/app.js';
 import { goldenPairs } from '../fixtures/goldenPairs.js';
 
 /**
@@ -57,6 +54,8 @@ async function runLoadTest() {
   };
 
   // 3. Start test HTTP server on random ephemeral port
+  process.env.NODE_ENV = 'test';
+  const { default: app } = await import('../../src/app.js');
   const server = app.listen(0);
   const { port } = server.address();
   console.log(`✓ Test HTTP server listening on port ${port}`);
@@ -128,7 +127,10 @@ async function runLoadTest() {
     console.log(`2xx Responses:     ${result['2xx']}`);
     console.log(`Non-2xx Responses: ${result.non2xx}`);
 
-    // Verify DoD: p95 < 300ms
+    // Verify DoD: zero non-2xx errors and p95 < 300ms
+    if (result.non2xx > 0) {
+      throw new Error(`Load test failed with ${result.non2xx} non-2xx responses`);
+    }
     if (p95 > 300) {
       throw new Error(`p95 latency threshold exceeded: ${p95}ms (expected < 300ms)`);
     }

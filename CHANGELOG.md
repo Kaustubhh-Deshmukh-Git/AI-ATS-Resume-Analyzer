@@ -1,4 +1,32 @@
 # Changelog
+
+## [Unreleased]
+### Fixed
+- **Security & Infrastructure**:
+  - Enforced `trust proxy 1` in Express for accurate reverse-proxy IP rate limiting behind load balancers.
+  - Dynamically derived rate limiter retry messages from `options.windowMs`.
+  - Added 72-byte password length constraint in Zod validation and Mongoose model to protect against bcrypt truncation.
+  - Hardened bcrypt dummy hash to valid cost-12 60-character string to guarantee constant-time responses.
+  - Enforced cookie expiration derived from JWT `exp` claim and made cookie `SameSite` configurable.
+  - Enforced loopback binding `127.0.0.1:27017` on Docker Compose MongoDB service and required `${JWT_SECRET}`.
+  - Upgraded server Dockerfile base image to `node:22-alpine` for `pdfjs-dist@6.4.299` compatibility.
+  - Hardened client Dockerfile with build-arg URL validation and non-root `USER nginx` execution.
+  - Added HTTP security headers (`X-Frame-Options`, `X-Content-Type-Options`, `X-XSS-Protection`, `Referrer-Policy`) to client static asset cache blocks.
+- **Frontend & Accessibility**:
+  - Prevented session check race conditions and superseded requests using auth operation sequence counters.
+  - Distinguished 401 unauthenticated sessions from transport/5xx failures in `AuthContext` with connection retry UI.
+  - Guaranteed cookie clearance on logout before clearing client state.
+  - Added screen-reader accessibility (`aria-invalid`, `aria-describedby`) to Login and Register inputs.
+  - Mapped backend Zod validation `err.details` onto specific form fields in Register page.
+  - Matched client email validation regex with backend standard.
+  - Prevented empty state flashing when error banners are displayed in History page.
+  - Recalculated pagination `totalPages` on analysis deletion.
+  - Separated report deletion errors from load errors in `AnalysisReport` to keep loaded data visible.
+  - Added focus containment assertions in `ConfirmModal` accessibility tests.
+  - Added failure-path test coverage for History API get and delete operations.
+  - Added header navigation tests covering guest/auth states and Sign Out redirection.
+  - Added `prefers-reduced-motion: reduce` override for loading spinners.
+
 ## [0.1.0] - 2026-10-15
 ### Added
 - Milestone 0: Scaffolded server and client packages
@@ -61,6 +89,7 @@
 - `Analysis` Mongoose model storing privacy-preserving SHA-256 `resumeHash`, truncated `jdSnippet`, score, breakdown, matched/missing keywords, and optional AI suggestions
 - Strict raw resume text exclusion from the database and response payloads to safeguard candidate privacy
 - Analyses CRUD routes: `POST /api/v1/analyses`, `GET /api/v1/analyses` (paginated), `GET /api/v1/analyses/:id`, and `DELETE /api/v1/analyses/:id`
+- Rate limiter for `POST /api/v1/analyses` (10 requests / 10 minutes per IP) guarding against compute exhaustion
 - IDOR defenses returning 404 `NOT_FOUND` on non-owner access or deletion attempts
 - Vitest unit and integration test suites covering AI-1..AI-6 and API-1..API-8
 
@@ -90,8 +119,9 @@
 - Strict dynamic CORS allowlist enforcing `CLIENT_ORIGIN` with credentials and rejecting unauthorized origins (SEC-9)
 - MongoDB index initialization and verification for `User` (unique lowercase email) and `Analysis` (`{ userId: 1, createdAt: -1 }`) compound indexes
 - Enhanced graceful shutdown with connection draining and 10-second unref force exit timeout on `SIGTERM` / `SIGINT`
-- Autocannon load testing benchmark (`server/tests/load/loadTest.js`): 50 RPS for 30s with mocked Gemini, achieving p95 latency of 33ms (< 300ms threshold) and 100% 2xx responses (1,500/1,500 requests)
+- Autocannon load testing benchmark (`server/tests/load/loadTest.js`): 50 RPS for 30s with mocked Gemini, achieving p97.5 latency of 33ms (< 300ms threshold) and 100% 2xx responses (1,500/1,500 requests)
 - Zero high or critical vulnerabilities verified across root, `server/`, and `client/` packages (`npm audit`)
+
 ## [0.8.0] - 2026-10-17
 ### Added
 - Milestone 7: Production Deployment, Ops & Release Workflow (DEP-1..DEP-5)
@@ -101,7 +131,7 @@
 - `render.yaml` Blueprint configuration for automated Render deployment with environment synchronization and health check path
 - `client/vercel.json` and root `vercel.json` with SPA rewrites, clean URLs, and strict HTTP security headers
 - Comprehensive production deployment documentation and environment checklist in `docs/sdd/09-deployment.md` (DEP-2)
-- Automated deployment acceptance smoke test (`scripts/smoke-test.js`) verifying DEP-1 through DEP-5 (DEP-3, DEP-4, DEP-5)
+- Automated deployment acceptance smoke test (`scripts/smoke-test.js`) performing Dockerfile configuration checks and verifying DEP-2 through DEP-5
 - Documented 1-click rollback procedures for Vercel and Render deployments (DEP-5)
 - Automated version release helper (`scripts/release.js`) and updated `/release` workflow in `.agent/workflows/release.md`
 - Completely revised `README.md` with badges, live demo URLs, Mermaid system architecture diagram, environment variables reference, and API specifications

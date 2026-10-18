@@ -10,11 +10,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const fixturesDir = path.join(__dirname, 'fixtures');
 
+import { generateAllFixtures } from './fixtures/createFixtures.js';
+
 describe('Resume Upload and Parsing API (Milestone 2 - UPL-1..UPL-6)', () => {
   let mongoServer;
   let authCookie;
 
   beforeAll(async () => {
+    // Generate fresh binary fixtures to guarantee exact xref byte offsets regardless of git checkout CRLF
+    generateAllFixtures(fixturesDir);
+
     mongoServer = await MongoMemoryServer.create();
     await mongoose.connect(mongoServer.getUri());
 

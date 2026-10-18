@@ -4,11 +4,13 @@ import app from './app.js';
 import { env } from './config/env.js';
 import { logger } from './utils/logger.js';
 
-// Configure reliable DNS servers for MongoDB Atlas SRV lookup on local environments
-try {
-  dns.setServers(['8.8.8.8', '1.1.1.1']);
-} catch {
-  // Gracefully fallback to system default if restricted
+// Optional DNS resolver override for restricted environments
+if (process.env.DNS_SERVERS) {
+  try {
+    dns.setServers(process.env.DNS_SERVERS.split(',').map((s) => s.trim()));
+  } catch (err) {
+    logger.warn({ err }, 'Failed to set custom DNS servers, retaining system default');
+  }
 }
 
 let server;

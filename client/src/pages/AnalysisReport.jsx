@@ -15,6 +15,7 @@ export default function AnalysisReport() {
   const [analysis, setAnalysis] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [deleteError, setDeleteError] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -50,13 +51,15 @@ export default function AnalysisReport() {
   }, [id]);
 
   const handleDeleteConfirm = async () => {
+    if (isDeleting) return;
     setIsDeleting(true);
+    setDeleteError(null);
     try {
       await api.delete(`/analyses/${id}`);
       setShowDeleteModal(false);
       navigate('/history');
     } catch (err) {
-      setError(err.message || 'Failed to delete analysis.');
+      setDeleteError(err.message || 'Failed to delete analysis.');
       setShowDeleteModal(false);
     } finally {
       setIsDeleting(false);
@@ -139,6 +142,29 @@ export default function AnalysisReport() {
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto' }} id="analysis-report-view">
+      {/* Delete Error Alert */}
+      {deleteError && (
+        <div
+          role="alert"
+          className="alert-error"
+          id="report-delete-error"
+          style={{
+            marginBottom: '1.5rem',
+            padding: '0.85rem 1.25rem',
+            borderRadius: 'var(--radius-md)',
+            background: 'rgba(239, 68, 68, 0.12)',
+            border: '1px solid rgba(239, 68, 68, 0.3)',
+            color: '#f87171',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem',
+          }}
+        >
+          <span style={{ fontWeight: 800 }}>!</span>
+          <div>{deleteError}</div>
+        </div>
+      )}
+
       {/* Top Navigation & Actions Bar */}
       <div
         style={{
@@ -273,6 +299,7 @@ export default function AnalysisReport() {
         onConfirm={handleDeleteConfirm}
         onClose={() => setShowDeleteModal(false)}
         isDestructive={true}
+        isBusy={isDeleting}
       />
     </div>
   );

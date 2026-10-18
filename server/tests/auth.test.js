@@ -37,11 +37,11 @@ describe('Auth Endpoints & Security (Milestone 1)', () => {
 
       expect(res.status).toBe(201);
       expect(res.body).toHaveProperty('user');
-      expect(res.body.user).toMatchObject({
+      expect(res.body.user).toEqual({
+        id: expect.any(String),
         name: 'Jane Doe',
         email: 'jane@example.com',
       });
-      expect(res.body.user.id).toBeDefined();
 
       // Non-negotiable security: Never return passwordHash, _id, or __v
       expect(res.body.user.passwordHash).toBeUndefined();
@@ -54,11 +54,11 @@ describe('Auth Endpoints & Security (Milestone 1)', () => {
       expect(cookies.some((c) => c.includes('token='))).toBe(true);
       expect(cookies.some((c) => c.toLowerCase().includes('httponly'))).toBe(true);
 
-      // Verify persisted user in DB has bcrypt hashed password
+      // Verify persisted user in DB has bcrypt hashed password with cost 12
       const savedUser = await User.findOne({ email: 'jane@example.com' }).select('+passwordHash');
       expect(savedUser).not.toBeNull();
       expect(savedUser.passwordHash).not.toBe('Password123!');
-      expect(savedUser.passwordHash.startsWith('$2')).toBe(true);
+      expect(savedUser.passwordHash).toMatch(/^\$2[aby]\$12\$/);
     });
   });
 
@@ -259,7 +259,10 @@ describe('Auth Endpoints & Security (Milestone 1)', () => {
       const clearedCookie = cookies.find((c) => c.startsWith('token='));
       expect(clearedCookie).toBeDefined();
       // Cookie is cleared with max-age=0 or expires in the past
-      expect(clearedCookie).toMatch(/Max-Age=0|Expires=/i);
+      const hasMaxAge0 = /Max-Age=0/i.test(clearedCookie);
+      const expiresMatch = clearedCookie.match(/Expires=([^;]+)/i);
+      const isExpiredInPast = expiresMatch && new Date(expiresMatch[1]).getTime() < Date.now();
+      expect(hasMaxAge0 || isExpiredInPast).toBe(true);
     });
 
     it('POST /api/v1/auth/logout returns 401 if unauthenticated', async () => {
@@ -294,6 +297,71 @@ describe('Auth Endpoints & Security (Milestone 1)', () => {
       expect(limitedRes.status).toBe(429);
       expect(limitedRes.body.error.code).toBe('RATE_LIMITED');
       expect(limitedRes.body.error.message).toContain('Too many requests');
+    });
+
+    it('enforces rate limiting on authentication routes when TEST_RATE_LIMIT=true', async () => {
+      process.env.TEST_RATE_LIMIT = 'true';
+      try {
+        const { default: authRoutes } = await import('../src/routes/authRoutes.js');
+        const { errorHandler } = await import('../src/middleware/errorHandler.js');
+        const cookieParser = (await import('cookie-parser')).default;
+
+        const testApp = express();
+        testApp.use(express.json());
+        testApp.use(cookieParser());
+        testApp.use('/api/v1/auth', authRoutes);
+        testApp.use(errorHandler);
+
+        for (let i = 0; i < 10; i++) {
+          await request(testApp).post('/api/v1/auth/login').send({
+            email: 'nonexistent@example.com',
+            password: 'WrongPassword123!',
+          });
+        }
+
+        const res = await request(testApp).post('/api/v1/auth/login').send({
+          email: 'nonexistent@example.com',
+          password: 'WrongPassword123!',
+        });
+
+        expect(res.status).toBe(429);
+        expect(res.body.error.code).toBe('RATE_LIMITED');
+      } finally {
+        delete process.env.TEST_RATE_LIMIT;
+      }
+    });
+  });
+
+  describe('Central Error Handler - Duplicate Key Handling', () => {
+    it('catches Mongo E11000 duplicate key error and maps to 409 CONFLICT', async () => {
+      const { errorHandler } = await import('../src/middleware/errorHandler.js');
+      const mockReq = { id: 'test-req-id' };
+      let status = null;
+      let body = null;
+      const mockRes = {
+        status(s) {
+          status = s;
+          return this;
+        },
+        json(b) {
+          body = b;
+          return this;
+        },
+      };
+
+      const mongoDuplicateError = new Error(
+        'E11000 duplicate key error collection: resumeiq.users index: email_1 dup key: { email: "duplicate@example.com" }'
+      );
+      mongoDuplicateError.code = 11000;
+      mongoDuplicateError.keyPattern = { email: 1 };
+      mongoDuplicateError.keyValue = { email: 'duplicate@example.com' };
+
+      errorHandler(mongoDuplicateError, mockReq, mockRes, () => {});
+
+      expect(status).toBe(409);
+      expect(body.error.code).toBe('CONFLICT');
+      expect(body.error.details[0].path).toBe('email');
+      expect(body.error.details[0].message).toContain('email');
     });
   });
 });

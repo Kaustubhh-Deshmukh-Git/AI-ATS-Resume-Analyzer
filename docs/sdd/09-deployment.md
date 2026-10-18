@@ -20,7 +20,7 @@
 | `JWT_SECRET` | Server | **Yes** | Cryptographically random string (≥ 32 characters). Generated automatically on Render or via `crypto.randomBytes(32).toString('hex')`. |
 | `JWT_EXPIRES_IN` | Server | **Yes** | Session expiration duration (e.g. `1h`). |
 | `GEMINI_API_KEY` | Server | **Yes** | Google AI Studio API key. Securely stored in environment variables, never committed. |
-| `GEMINI_MODEL` | Server | **Yes** | Set to `gemini-3.8-flash` (or current active production tier). |
+| `GEMINI_MODEL` | Server | **Yes** | Set to `gemini-2.5-flash` (locked per architecture). |
 | `CLIENT_ORIGIN` | Server | **Yes** | Production frontend domain (e.g. `https://resumeiq.vercel.app`). Enforces strict CORS policy. |
 | `VITE_API_URL` | Client | **Yes** | Base API URL for frontend fetch requests (e.g. `https://resumeiq-api.onrender.com/api/v1`). |
 
@@ -92,4 +92,11 @@ node scripts/smoke-test.js --api https://<render-api-url>/api/v1 --client https:
      ```
 
 3. **Database Recovery**:
-   - Atlas Point-in-time Restore (if enabled on M10+) or restore from weekly `mongodump` archive.
+   - Atlas Point-in-time Restore (if enabled on M10+) or restore from automated snapshots via MongoDB Atlas Cloud Backup console.
+   - For manual emergency exports/imports:
+     ```bash
+     # Backup:
+     mongodump --uri="$MONGODB_URI" --archive=backup-$(date +%F).gz --gzip
+     # Restore:
+     mongorestore --uri="$MONGODB_URI" --archive=backup-<date>.gz --gzip --drop
+     ```
