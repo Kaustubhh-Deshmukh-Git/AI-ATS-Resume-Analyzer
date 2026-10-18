@@ -25,13 +25,17 @@ export default function BulletCompare({ original, optimized, index = 1 }) {
         textarea.style.opacity = '0';
         document.body.appendChild(textarea);
         textarea.select();
-        document.execCommand('copy');
+        const success = document.execCommand('copy');
         document.body.removeChild(textarea);
+        if (!success) {
+          throw new Error('execCommand failed');
+        }
       }
       setCopied(true);
       setCopyError(false);
       setTimeout(() => setCopied(false), 2200);
     } catch {
+      setCopied(false);
       setCopyError(true);
       setTimeout(() => setCopyError(false), 3000);
     }
@@ -114,7 +118,7 @@ export default function BulletCompare({ original, optimized, index = 1 }) {
           <button
             type="button"
             onClick={handleCopy}
-            className={`btn ${copied ? 'btn-primary' : 'btn-secondary'}`}
+            className={`btn ${copied ? 'btn-primary' : copyError ? 'btn-danger' : 'btn-secondary'}`}
             style={{
               padding: '0.3rem 0.75rem',
               fontSize: '0.8rem',
@@ -127,6 +131,10 @@ export default function BulletCompare({ original, optimized, index = 1 }) {
             {copied ? (
               <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
                 ✓ Copied!
+              </span>
+            ) : copyError ? (
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#ef4444' }}>
+                ⚠️ Failed
               </span>
             ) : (
               <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>

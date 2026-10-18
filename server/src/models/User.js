@@ -32,6 +32,8 @@ const userSchema = new mongoose.Schema(
         delete ret._id;
         delete ret.__v;
         delete ret.passwordHash;
+        delete ret.createdAt;
+        delete ret.updatedAt;
         return ret;
       },
     },
@@ -53,6 +55,9 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
  * @returns {Promise<string>}
  */
 userSchema.statics.hashPassword = async function (password) {
+  if (Buffer.byteLength(password, 'utf8') > 72) {
+    throw new Error('Password cannot exceed 72 bytes');
+  }
   return bcrypt.hash(password, 12);
 };
 

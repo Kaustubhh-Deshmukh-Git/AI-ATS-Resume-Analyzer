@@ -273,7 +273,7 @@ input, textarea {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   transition: color var(--transition-fast);
 }
 
@@ -295,6 +295,12 @@ input, textarea {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 3s;
   }
 }
 
@@ -544,7 +550,9 @@ textarea:focus-visible {
     font-size: 1.3rem;
   }
 
-  .btn {
+  .form-group .btn,
+  .action-group .btn,
+  .modal-actions .btn {
     width: 100%;
     justify-content: center;
   }

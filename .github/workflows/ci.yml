@@ -13,6 +13,11 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm test
+        env:
+          NODE_ENV: test
+          MONGODB_URI: mongodb://localhost:27017/test
+          JWT_SECRET: test_jwt_secret_must_be_at_least_32_characters_long
+          GEMINI_API_KEY: test_gemini_api_key
   client:
     runs-on: ubuntu-latest
     defaults: { run: { working-directory: client } }
@@ -23,6 +28,9 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm test
+        env:
+          NODE_ENV: test
+          VITE_API_URL: http://localhost:5000/api/v1
       - run: npm run build
   secrets:
     runs-on: ubuntu-latest

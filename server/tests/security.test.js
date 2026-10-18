@@ -35,6 +35,7 @@ describe('Milestone 6 - Security Hardening & Acceptance (SEC-1..SEC-10)', () => 
 
   describe('SEC-2: Cookie Flags (HttpOnly, SameSite, Secure)', () => {
     it('configures cookie with HttpOnly, SameSite=Lax, and Max-Age=3600s', async () => {
+      expect.assertions(6);
       const mockRes = {
         cookie: (name, val, options) => {
           expect(name).toBe('token');
@@ -42,7 +43,7 @@ describe('Milestone 6 - Security Hardening & Acceptance (SEC-1..SEC-10)', () => 
           expect(options.sameSite).toBe('lax');
           expect(options.maxAge).toBe(3600000); // 1 hour
           expect(options.path).toBe('/');
-          expect(typeof options.secure).toBe('boolean');
+          expect(options.secure).toBe(env.NODE_ENV === 'production');
         },
       };
 
@@ -127,24 +128,18 @@ describe('Milestone 6 - Security Hardening & Acceptance (SEC-1..SEC-10)', () => 
   describe('Mongo Indexes Verification', () => {
     it('creates and verifies User model indexes (unique lowercase email)', async () => {
       await User.init();
-      const indexes = await User.collection.getIndexes();
-
-      // Check for email index
-      const emailIndexKey = Object.keys(indexes).find((idxName) =>
-        JSON.stringify(indexes[idxName]).includes('email')
-      );
-      expect(emailIndexKey).toBeDefined();
+      const indexes = await User.collection.indexes();
+      const emailIdx = indexes.find((idx) => idx.key && idx.key.email === 1);
+      expect(emailIdx).toBeDefined();
+      expect(emailIdx.unique).toBe(true);
     });
 
     it('creates and verifies Analysis model compound index ({ userId: 1, createdAt: -1 })', async () => {
       await Analysis.init();
-      const indexes = await Analysis.collection.getIndexes();
-
-      // Check for compound index on userId and createdAt
-      const compoundIdx = Object.values(indexes).find((idx) => {
-        const str = JSON.stringify(idx);
-        return str.includes('userId') && str.includes('createdAt');
-      });
+      const indexes = await Analysis.collection.indexes();
+      const compoundIdx = indexes.find(
+        (idx) => idx.key && idx.key.userId === 1 && idx.key.createdAt === -1
+      );
       expect(compoundIdx).toBeDefined();
     });
   });

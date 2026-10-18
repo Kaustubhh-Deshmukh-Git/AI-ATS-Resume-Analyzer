@@ -22,6 +22,7 @@ export default function ConfirmModal({
   onConfirm,
   onClose,
   isDestructive = true,
+  isBusy = false,
 }) {
   const modalRef = useRef(null);
   const cancelBtnRef = useRef(null);
@@ -46,6 +47,7 @@ export default function ConfirmModal({
 
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
+        if (isBusy) return;
         e.preventDefault();
         onClose();
         return;
@@ -53,21 +55,31 @@ export default function ConfirmModal({
 
       if (e.key === 'Tab') {
         if (!modalRef.current) return;
-        const focusableElements = modalRef.current.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        const focusableElements = Array.from(
+          modalRef.current.querySelectorAll(
+            'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+          )
         );
+        if (focusableElements.length === 0) return;
         const first = focusableElements[0];
         const last = focusableElements[focusableElements.length - 1];
+
+        // Containment check: if current focus is outside the modal, pull it into the modal
+        if (!modalRef.current.contains(document.activeElement)) {
+          e.preventDefault();
+          first.focus();
+          return;
+        }
 
         if (e.shiftKey) {
           if (document.activeElement === first) {
             e.preventDefault();
-            last?.focus();
+            last.focus();
           }
         } else {
           if (document.activeElement === last) {
             e.preventDefault();
-            first?.focus();
+            first.focus();
           }
         }
       }
@@ -75,7 +87,7 @@ export default function ConfirmModal({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, isBusy]);
 
   if (!isOpen) return null;
 
@@ -97,7 +109,7 @@ export default function ConfirmModal({
         padding: '1rem',
       }}
       onClick={(e) => {
-        if (e.target === e.currentTarget) {
+        if (!isBusy && e.target === e.currentTarget) {
           onClose();
         }
       }}
@@ -162,6 +174,7 @@ export default function ConfirmModal({
             type="button"
             className="btn btn-secondary"
             onClick={onClose}
+            disabled={isBusy}
             id="modal-cancel-btn"
           >
             {cancelText}
@@ -170,17 +183,23 @@ export default function ConfirmModal({
             type="button"
             className={`btn ${isDestructive ? 'btn-danger' : 'btn-primary'}`}
             onClick={onConfirm}
+            disabled={isBusy}
             id="modal-confirm-btn"
             style={
               isDestructive
                 ? {
                     background: 'var(--danger)',
                     color: '#fff',
+                    opacity: isBusy ? 0.65 : 1,
+                    cursor: isBusy ? 'not-allowed' : 'pointer',
                   }
-                : {}
+                : {
+                    opacity: isBusy ? 0.65 : 1,
+                    cursor: isBusy ? 'not-allowed' : 'pointer',
+                  }
             }
           >
-            {confirmText}
+            {isBusy ? 'Processing...' : confirmText}
           </button>
         </div>
       </div>

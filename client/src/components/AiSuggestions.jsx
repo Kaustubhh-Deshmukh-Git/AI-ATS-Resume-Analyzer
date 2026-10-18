@@ -16,7 +16,9 @@ export default function AiSuggestions({ aiStatus = 'ok', ai = null }) {
     return <DegradedAiBanner />;
   }
 
-  const { missingSkills = [], tips = [], bulletRewrites = [] } = ai;
+  const missingSkills = ai.missingSkills || [];
+  const tips = ai.optimizationTips || ai.tips || [];
+  const rewrites = ai.bulletImprovements || ai.bulletRewrites || [];
 
   return (
     <div className="ai-suggestions-section glass-card" style={{ padding: '2rem' }}>
@@ -151,7 +153,7 @@ export default function AiSuggestions({ aiStatus = 'ok', ai = null }) {
         )}
 
         {/* 3. High-Impact Bullet Rewrites */}
-        {bulletRewrites.length > 0 && (
+        {rewrites.length > 0 && (
           <div id="ai-bullet-rewrites-section">
             <div style={{ marginBottom: '1rem' }}>
               <h4
@@ -173,12 +175,13 @@ export default function AiSuggestions({ aiStatus = 'ok', ai = null }) {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {bulletRewrites.map((rewrite, idx) => (
+              {rewrites.map((rewrite, idx) => (
                 <BulletCompare
                   key={idx}
                   index={idx + 1}
                   original={rewrite.original}
-                  optimized={rewrite.optimized}
+                  optimized={rewrite.improved ?? rewrite.optimized}
+                  reason={rewrite.reason}
                 />
               ))}
             </div>

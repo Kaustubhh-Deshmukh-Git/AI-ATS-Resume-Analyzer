@@ -40,10 +40,13 @@ describe('Milestone 5 - Accessibility & Keyboard Controls (UI-8)', () => {
 
     // Tab on last element wraps to first
     fireEvent.keyDown(dialog, { key: 'Tab' });
+    expect(document.activeElement).toBe(cancelBtn);
 
     // Shift-Tab on first element wraps to last
     cancelBtn.focus();
+    expect(document.activeElement).toBe(cancelBtn);
     fireEvent.keyDown(dialog, { key: 'Tab', shiftKey: true });
+    expect(document.activeElement).toBe(deleteBtn);
 
     // Rerender as closed
     rerender(
@@ -78,7 +81,7 @@ describe('Milestone 5 - Accessibility & Keyboard Controls (UI-8)', () => {
 
     expect(screen.getByRole('alert')).toBeInTheDocument();
     expect(screen.getByText(/Something went wrong/i)).toBeInTheDocument();
-    expect(screen.getByText('Test rendering crash')).toBeInTheDocument();
+    expect(screen.getByText(/An unexpected error occurred while rendering this view/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Try Again/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Reload Page/i })).toBeInTheDocument();
   });

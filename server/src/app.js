@@ -14,6 +14,9 @@ import analysisRoutes from './routes/analysisRoutes.js';
 
 const app = express();
 
+// Trust reverse proxy (e.g. Render, Nginx) for accurate client IP in rate limiting
+app.set('trust proxy', 1);
+
 // Security headers
 app.use(helmet());
 

@@ -4,8 +4,8 @@ import { User } from '../models/User.js';
 import { env } from '../config/env.js';
 import { AppError } from '../utils/AppError.js';
 
-// Pre-computed dummy hash to prevent user enumeration via timing attacks
-const DUMMY_HASH = '$2a$12$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012345';
+// Pre-computed dummy hash to prevent user enumeration via timing attacks (valid 60-char bcrypt hash)
+const DUMMY_HASH = '$2b$12$dFJgVckw/UvoXHf5patYZO0g9Zhesxd9mS9UDiI2yZCxSf0HQZ4Fq';
 
 /**
  * Generate a signed JWT token.

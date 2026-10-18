@@ -36,9 +36,8 @@ export default function KeywordChips({ matched = [], missing = [] }) {
           </p>
         </div>
 
-        {/* Tab switcher buttons */}
+        {/* Filter switcher buttons */}
         <div
-          role="tablist"
           aria-label="Filter keywords"
           style={{
             display: 'flex',
@@ -51,8 +50,7 @@ export default function KeywordChips({ matched = [], missing = [] }) {
         >
           <button
             type="button"
-            role="tab"
-            aria-selected={activeTab === 'all'}
+            aria-pressed={activeTab === 'all'}
             onClick={() => setActiveTab('all')}
             className={`btn ${activeTab === 'all' ? 'btn-primary' : 'btn-secondary'}`}
             style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem' }}
@@ -62,8 +60,7 @@ export default function KeywordChips({ matched = [], missing = [] }) {
           </button>
           <button
             type="button"
-            role="tab"
-            aria-selected={activeTab === 'matched'}
+            aria-pressed={activeTab === 'matched'}
             onClick={() => setActiveTab('matched')}
             className={`btn ${activeTab === 'matched' ? 'btn-primary' : 'btn-secondary'}`}
             style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem' }}
@@ -73,8 +70,7 @@ export default function KeywordChips({ matched = [], missing = [] }) {
           </button>
           <button
             type="button"
-            role="tab"
-            aria-selected={activeTab === 'missing'}
+            aria-pressed={activeTab === 'missing'}
             onClick={() => setActiveTab('missing')}
             className={`btn ${activeTab === 'missing' ? 'btn-primary' : 'btn-secondary'}`}
             style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem' }}

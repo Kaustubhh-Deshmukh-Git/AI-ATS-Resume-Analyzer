@@ -18,7 +18,7 @@ export const createAuthRateLimiter = (overrides = {}) =>
       res.status(options.statusCode).json({
         error: {
           code: 'RATE_LIMITED',
-          message: 'Too many requests from this IP, please try again after 15 minutes',
+          message: `Too many requests from this IP, please try again after ${Math.ceil(options.windowMs / 60000)} minutes`,
           details: [],
           requestId: req.id || req.headers['x-request-id'] || 'unknown',
         },

@@ -36,7 +36,7 @@ export const login = async (req, res, next) => {
 };
 
 /**
- * Invalidate user session and clear authentication cookie.
+ * Clear authentication cookie on user logout.
  *
  * @param {import('express').Request} req
  * @param {import('express').Response} res

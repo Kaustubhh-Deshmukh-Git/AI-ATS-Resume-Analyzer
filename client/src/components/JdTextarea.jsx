@@ -23,7 +23,7 @@ export default function JdTextarea({
   const counterId = `jd-counter-${generatedId}`;
   const errorId = `jd-error-${generatedId}`;
 
-  const charCount = value ? value.length : 0;
+  const charCount = value ? value.trim().length : 0;
   const isTooShort = charCount > 0 && charCount < 50;
   const isTooLong = charCount > 10000;
   const isValid = charCount >= 50 && charCount <= 10000;
@@ -48,8 +48,6 @@ export default function JdTextarea({
         </label>
         <div
           id={counterId}
-          aria-live="polite"
-          aria-atomic="true"
           style={{
             fontSize: '0.8rem',
             fontWeight: 600,

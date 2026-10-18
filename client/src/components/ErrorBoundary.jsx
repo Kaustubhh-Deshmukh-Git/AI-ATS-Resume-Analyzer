@@ -13,10 +13,10 @@ export default class ErrorBoundary extends React.Component {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error, errorInfo) {
-    // Intentionally avoid logging PII, but record crash for debugging
+  componentDidCatch(_error, _errorInfo) {
+    // Avoid logging raw error text or component stacks to protect privacy and avoid PII leaks
     if (import.meta.env?.MODE !== 'test') {
-      console.error('ErrorBoundary caught an error:', error?.message, errorInfo?.componentStack);
+      console.error('[ErrorBoundary] Component rendering exception caught');
     }
   }
 
@@ -74,7 +74,7 @@ export default class ErrorBoundary extends React.Component {
               marginBottom: '1.5rem',
             }}
           >
-            {this.state.error?.message || 'An unexpected rendering error occurred. Please try again.'}
+            An unexpected error occurred while rendering this view. Please try again.
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
             <button

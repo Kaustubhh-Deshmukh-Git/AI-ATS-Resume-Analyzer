@@ -1,7 +1,17 @@
+import dns from 'dns';
 import mongoose from 'mongoose';
 import app from './app.js';
 import { env } from './config/env.js';
 import { logger } from './utils/logger.js';
+
+// Optional DNS resolver override for restricted environments
+if (process.env.DNS_SERVERS) {
+  try {
+    dns.setServers(process.env.DNS_SERVERS.split(',').map((s) => s.trim()));
+  } catch (err) {
+    logger.warn({ err }, 'Failed to set custom DNS servers, retaining system default');
+  }
+}
 
 let server;
 
